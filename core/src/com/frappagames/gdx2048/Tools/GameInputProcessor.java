@@ -3,35 +3,38 @@ package com.frappagames.gdx2048.Tools;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.frappagames.gdx2048.Gdx2048.Direction;
+import com.frappagames.gdx2048.Screens.PlayScreen;
 
 /**
  * Created by gfp on 28/06/16.
  */
 public class GameInputProcessor implements InputProcessor {
+    private PlayScreen playScreen;
+
+    public GameInputProcessor(PlayScreen playScreen) {
+        this.playScreen = playScreen;
+    }
+
     public boolean keyDown (int keycode) {
         return false;
     }
 
     public boolean keyUp (int keycode) {
-        String direction;
-
         switch (keycode) {
             case Input.Keys.LEFT:
-                direction = "Gauche";
+                playScreen.move(Direction.LEFT);
                 break;
             case Input.Keys.RIGHT:
-                direction = "Droite";
+                playScreen.move(Direction.RIGHT);
                 break;
             case Input.Keys.UP:
-                direction = "Haut";
+                playScreen.move(Direction.UP);
                 break;
             case Input.Keys.DOWN:
-                direction = "Bas";
+                playScreen.move(Direction.DOWN);
                 break;
-            default:
-                direction = "";
         }
-        Gdx.app.log("INFO", direction);
 
         return false;
     }

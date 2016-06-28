@@ -1,16 +1,21 @@
 package com.frappagames.gdx2048.Tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.frappagames.gdx2048.Gdx2048;
+import com.frappagames.gdx2048.Gdx2048.Direction;
+import com.frappagames.gdx2048.Screens.PlayScreen;
 
 /**
  * Created by gfp on 28/06/16.
  */
 public class GameGestureListener implements GestureListener {
-    private Gdx2048 game;
+    private PlayScreen playScreen;
     float startX, startY;
+
+    public GameGestureListener(PlayScreen playScreen) {
+        this.playScreen = playScreen;
+    }
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
@@ -46,26 +51,23 @@ public class GameGestureListener implements GestureListener {
 
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
-        String direction;
         float moveX = x - startX;
         float moveY = y - startY;
 
         // Horizontal
         if (Math.abs(moveX) > Math.abs(moveY)) {
             if (moveX < 0) {
-                direction = "Gauche";
+                playScreen.move(Direction.LEFT);
             } else {
-                direction = "Droite";
+                playScreen.move(Direction.RIGHT);
             }
         } else {
             if (moveY < 0) {
-                direction = "Haut";
+                playScreen.move(Direction.UP);
             } else {
-                direction = "Bas";
+                playScreen.move(Direction.DOWN);
             }
         }
-
-        Gdx.app.log("INFO", direction);
 
         return false;
     }
