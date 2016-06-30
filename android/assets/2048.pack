@@ -1,0 +1,215 @@
+
+2048.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+mask_yellow
+  rotate: false
+  xy: 1, 364
+  size: 640, 640
+  orig: 640, 640
+  offset: 0, 0
+  index: -1
+lblAbout
+  rotate: false
+  xy: 1, 308
+  size: 567, 54
+  orig: 567, 54
+  offset: 0, 0
+  index: -1
+btn_brown
+  rotate: false
+  xy: 643, 903
+  size: 491, 101
+  orig: 491, 101
+  offset: 0, 0
+  index: -1
+btn_gray
+  rotate: false
+  xy: 1, 205
+  size: 491, 101
+  orig: 491, 101
+  offset: 0, 0
+  index: -1
+btn_red
+  rotate: false
+  xy: 643, 800
+  size: 491, 101
+  orig: 491, 101
+  offset: 0, 0
+  index: -1
+btn_yellow
+  rotate: false
+  xy: 1136, 903
+  size: 491, 101
+  orig: 491, 101
+  offset: 0, 0
+  index: -1
+author
+  rotate: false
+  xy: 1, 120
+  size: 497, 83
+  orig: 497, 83
+  offset: 0, 0
+  index: -1
+title_big
+  rotate: false
+  xy: 643, 667
+  size: 438, 131
+  orig: 438, 131
+  offset: 0, 0
+  index: -1
+lblHowToPlay
+  rotate: false
+  xy: 1, 63
+  size: 498, 55
+  orig: 498, 55
+  offset: 0, 0
+  index: -1
+best_score
+  rotate: false
+  xy: 643, 545
+  size: 200, 120
+  orig: 200, 120
+  offset: 0, 0
+  index: -1
+score_bloc
+  rotate: false
+  xy: 643, 423
+  size: 200, 120
+  orig: 200, 120
+  offset: 0, 0
+  index: -1
+tile1024
+  rotate: false
+  xy: 845, 530
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+btn_red_small
+  rotate: false
+  xy: 1136, 841
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1
+btn_small_gray
+  rotate: false
+  xy: 1629, 944
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1
+title_small
+  rotate: false
+  xy: 1, 1
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1
+tile128
+  rotate: false
+  xy: 845, 393
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile16
+  rotate: false
+  xy: 982, 530
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile16384
+  rotate: false
+  xy: 982, 393
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile2
+  rotate: false
+  xy: 1338, 766
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile2048
+  rotate: false
+  xy: 1475, 766
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile256
+  rotate: false
+  xy: 1831, 869
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile32
+  rotate: false
+  xy: 643, 286
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile32768
+  rotate: false
+  xy: 780, 256
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile4
+  rotate: false
+  xy: 917, 256
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile4096
+  rotate: false
+  xy: 1054, 256
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile512
+  rotate: false
+  xy: 1629, 807
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile64
+  rotate: false
+  xy: 1136, 704
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile65536
+  rotate: false
+  xy: 1119, 567
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile8
+  rotate: false
+  xy: 1119, 430
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
+tile8192
+  rotate: false
+  xy: 1191, 293
+  size: 135, 135
+  orig: 135, 135
+  offset: 0, 0
+  index: -1
