@@ -3,212 +3,226 @@
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-mask_yellow
+grid
   rotate: false
-  xy: 1, 364
+  xy: 1, 370
   size: 640, 640
   orig: 640, 640
   offset: 0, 0
   index: -1
+mask_yellow
+  rotate: false
+  xy: 643, 370
+  size: 640, 640
+  orig: 640, 640
+  offset: 0, 0
+  index: -1
+explanation_text
+  rotate: false
+  xy: 1, 292
+  size: 612, 76
+  orig: 612, 76
+  offset: 0, 0
+  index: -1
 lblAbout
   rotate: false
-  xy: 1, 308
+  xy: 1285, 956
   size: 567, 54
   orig: 567, 54
   offset: 0, 0
   index: -1
 btn_brown
   rotate: false
-  xy: 643, 903
+  xy: 1, 189
   size: 491, 101
   orig: 491, 101
   offset: 0, 0
   index: -1
 btn_gray
   rotate: false
-  xy: 1, 205
+  xy: 1285, 853
   size: 491, 101
   orig: 491, 101
   offset: 0, 0
   index: -1
 btn_red
   rotate: false
-  xy: 643, 800
+  xy: 1, 86
   size: 491, 101
   orig: 491, 101
   offset: 0, 0
   index: -1
 btn_yellow
   rotate: false
-  xy: 1136, 903
+  xy: 1285, 750
   size: 491, 101
   orig: 491, 101
   offset: 0, 0
   index: -1
 author
   rotate: false
-  xy: 1, 120
+  xy: 1, 1
   size: 497, 83
   orig: 497, 83
   offset: 0, 0
   index: -1
 title_big
   rotate: false
-  xy: 643, 667
+  xy: 1285, 617
   size: 438, 131
   orig: 438, 131
   offset: 0, 0
   index: -1
 lblHowToPlay
   rotate: false
-  xy: 1, 63
+  xy: 615, 313
   size: 498, 55
   orig: 498, 55
   offset: 0, 0
   index: -1
 best_score
   rotate: false
-  xy: 643, 545
+  xy: 1285, 495
   size: 200, 120
   orig: 200, 120
   offset: 0, 0
   index: -1
-score_bloc
+current_score
   rotate: false
-  xy: 643, 423
+  xy: 1285, 373
   size: 200, 120
   orig: 200, 120
   offset: 0, 0
   index: -1
 tile1024
   rotate: false
-  xy: 845, 530
+  xy: 1487, 480
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
-btn_red_small
-  rotate: false
-  xy: 1136, 841
-  size: 200, 60
-  orig: 200, 60
-  offset: 0, 0
-  index: -1
-btn_small_gray
-  rotate: false
-  xy: 1629, 944
-  size: 200, 60
-  orig: 200, 60
-  offset: 0, 0
-  index: -1
-title_small
-  rotate: false
-  xy: 1, 1
-  size: 200, 60
-  orig: 200, 60
-  offset: 0, 0
-  index: -1
 tile128
   rotate: false
-  xy: 845, 393
+  xy: 494, 155
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile16
   rotate: false
-  xy: 982, 530
+  xy: 631, 176
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile16384
   rotate: false
-  xy: 982, 393
+  xy: 768, 176
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile2
   rotate: false
-  xy: 1338, 766
+  xy: 905, 176
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile2048
   rotate: false
-  xy: 1475, 766
+  xy: 1487, 343
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile256
   rotate: false
-  xy: 1831, 869
+  xy: 1624, 480
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile32
   rotate: false
-  xy: 643, 286
+  xy: 1624, 343
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
+btn_red_small
+  rotate: false
+  xy: 1285, 311
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1
+btn_small_gray
+  rotate: false
+  xy: 1487, 281
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1
+title_small
+  rotate: false
+  xy: 631, 114
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1
 tile32768
   rotate: false
-  xy: 780, 256
+  xy: 1778, 819
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile4
   rotate: false
-  xy: 917, 256
+  xy: 1042, 176
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile4096
   rotate: false
-  xy: 1054, 256
+  xy: 1778, 682
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile512
   rotate: false
-  xy: 1629, 807
+  xy: 833, 39
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile64
   rotate: false
-  xy: 1136, 704
+  xy: 970, 39
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile65536
   rotate: false
-  xy: 1119, 567
+  xy: 1107, 39
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile8
   rotate: false
-  xy: 1119, 430
+  xy: 1761, 545
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
   index: -1
 tile8192
   rotate: false
-  xy: 1191, 293
+  xy: 1761, 408
   size: 135, 135
   orig: 135, 135
   offset: 0, 0
