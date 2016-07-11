@@ -2,46 +2,65 @@ package com.frappagames.gdx2048.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.frappagames.gdx2048.Gdx2048;
 import com.frappagames.gdx2048.Gdx2048.Direction;
 import com.frappagames.gdx2048.Gdx2048.GameType;
 import com.frappagames.gdx2048.Tools.GameGestureListener;
 import com.frappagames.gdx2048.Tools.GameInputProcessor;
 import com.frappagames.gdx2048.Tools.GameScreen;
+import com.frappagames.gdx2048.Tools.Tile;
+
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Main play screen
  */
 public class PlayScreen extends GameScreen {
-    private       int[][] board;
+    private static final int GRID_WIDTH = 4;
+    private static final int FRAME_THICKNESS = 16;
+    private       Tile[][] board;
     private       int     score;
+    private int currentScore;
+    private int currentCell;
+    private int bestScore;
+    private int bestCell;
 
     protected     Table      table;
     private final TextButton replayBtn;
     private final TextButton menuBtn;
     private final Image      titleImg;
-    private final Image      currentScoreImg;
-    private final Image      bestScoreImg;
     private final Image      explanationImg;
     private final Image      backgroundImg;
     private BitmapFont       font;
+    private Label            currentScoreLbl;
+    private Label            bestScoreLbl;
+    private Random random;
 
     public PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
 
+        currentScore = 0;
+        currentCell  = 0;
+        bestScore = 0;
+        bestCell  = 0;
+
         titleImg        = new Image(game.atlas.findRegion("title_small"));
-        currentScoreImg = new Image(game.atlas.findRegion("current_score"));
-        bestScoreImg    = new Image(game.atlas.findRegion("best_score"));
-        explanationImg = new Image(game.atlas.findRegion("explanation_text"));
-        backgroundImg  = new Image(game.atlas.findRegion("grid"));
+        explanationImg  = new Image(game.atlas.findRegion("explanation_text"));
+        backgroundImg   = new Image(game.atlas.findRegion("grid"));
+        this.random     = new Random();
 
         Skin skin = new Skin();
         skin.addRegions(game.atlas);
@@ -55,6 +74,22 @@ public class PlayScreen extends GameScreen {
 
         replayBtn = new TextButton("REJOUER", redBtnSkin);
         menuBtn   = new TextButton("MENU", redBtnSkin);
+
+
+        LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+        currentScoreLbl = new Label(String.valueOf(currentScore), labelStyle);
+        currentScoreLbl.setAlignment(Align.center, Align.bottom);
+
+        Table currentScoreContainer = new Table();
+        currentScoreContainer.add(currentScoreLbl).pad(70, 10, 10, 10);
+        currentScoreContainer.setBackground(skin.getDrawable("current_score"));
+
+        bestScoreLbl = new Label(String.valueOf(bestScore), labelStyle);
+        bestScoreLbl.setAlignment(Align.center, Align.bottom);
+
+        Table bestScoreContainer = new Table();
+        bestScoreContainer.add(bestScoreLbl).pad(70, 10, 10, 10);
+        bestScoreContainer.setBackground(skin.getDrawable("best_score"));
 
 
         replayBtn.addListener(new ChangeListener() {
@@ -73,8 +108,8 @@ public class PlayScreen extends GameScreen {
         table.setFillParent(true);
 
         table.add(titleImg).pad(0, 0, 0, 30);
-        table.add(currentScoreImg).pad(10);
-        table.add(bestScoreImg).pad(10).row();
+        table.add(currentScoreContainer);
+        table.add(bestScoreContainer).row();
 
         table.add();
         table.add(replayBtn).pad(10);
@@ -96,11 +131,26 @@ public class PlayScreen extends GameScreen {
         inputMultiplexer.addProcessor(new GameInputProcessor(this));
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        board = new int[4][4];
-        score = 0;
+        board = new Tile[4][4];
+        initializeGrid();
 
         addRandomTile();
         addRandomTile();
+        showGrid();
+    }
+
+    public void initializeGrid() {
+        int xx = FRAME_THICKNESS;
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            int yy = FRAME_THICKNESS;
+            for (int y = 0; y < GRID_WIDTH; y++) {
+                Tile cell = new Tile(0);
+                cell.setCellLocation(xx, yy);
+                board[x][y] = cell;
+                yy += FRAME_THICKNESS + Tile.getCellWidth();
+            }
+            xx += FRAME_THICKNESS + Tile.getCellWidth();
+        }
     }
 
     @Override
@@ -117,17 +167,29 @@ public class PlayScreen extends GameScreen {
         switch (direction) {
             case UP:
                 Gdx.app.log("INFO", "Move UP");
+                showGrid();
                 break;
             case DOWN:
                 Gdx.app.log("INFO", "Move DOWN");
+                showGrid();
                 break;
             case LEFT:
                 Gdx.app.log("INFO", "Move LEFT");
+                showGrid();
                 break;
             case RIGHT:
                 Gdx.app.log("INFO", "Move RIGHT");
+                showGrid();
                 break;
         }
+    }
+
+    public void showGrid() {
+        System.out.println(Arrays.deepToString(board));
+    }
+
+    private boolean isGameOver() {
+        return (this.checkCellAvailable() || checkMoveAvailable());
     }
 
     /**
@@ -136,7 +198,7 @@ public class PlayScreen extends GameScreen {
     private boolean checkCellAvailable() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                if (board[i][j] == 0) return true;
+                if (board[i][j].isZeroValue()) return true;
             }
         }
 
@@ -149,12 +211,12 @@ public class PlayScreen extends GameScreen {
     private boolean checkMoveAvailable() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                if (board[i][j] == board[i + 1][j]) return true;
+                if (board[i][j].getValue() == board[i + 1][j].getValue()) return true;
             }
         }
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
-                if (board[i][j] == board[i][j + 1]) return true;
+                if (board[i][j].getValue() == board[i][j + 1].getValue()) return true;
             }
         }
 
@@ -162,22 +224,52 @@ public class PlayScreen extends GameScreen {
     }
 
     private void addRandomTile() {
-        float value = Math.random() < 0.9f ? 2 : 4;
-        System.out.println(value);
-    }
+        int value = (random.nextInt(10) < 9) ?  2 : 4;
 
-    /**
-     * Check if a Cell is empty
-     */
-    private boolean getAvailableCells() {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (board[i][j] == 0) return true;
+        boolean locationFound = false;
+        while(!locationFound) {
+            int x = random.nextInt(3);
+            int y = random.nextInt(3);
+            if (board[x][y].isZeroValue()) {
+                board[x][y].setValue(value);
+                locationFound = true;
             }
         }
 
-        return false;
+        updateScore(0, value);
     }
+
+    private void updateScore(int value, int cellValue) {
+        currentScore += value;
+        currentCell   = (cellValue > currentCell) ? cellValue : currentCell;
+    }
+
+
+    private void moveCellsTop() {
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            for (int y = GRID_WIDTH - 1; y > 0; y--) {
+                if (board[x][y - 1].isZeroValue() && !board[x][y].isZeroValue()) {
+                    board[x][y].setValue(board[x][y + 1].getValue());
+                    board[x][y + 1].setValue(0);
+                }
+            }
+        }
+    }
+    private void moveCellsBottom() {
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            for (int y = 0; y < (GRID_WIDTH - 1); y++) {
+                if (board[x][y].isZeroValue() && !board[x][y + 1].isZeroValue()) {
+                    board[x][y].setValue(board[x][y + 1].getValue());
+                    board[x][y + 1].setValue(0);
+                }
+            }
+        }
+    }
+
+    private void mergeCells(int x, int y) {
+
+    }
+
 
     @Override
     public void dispose() {
