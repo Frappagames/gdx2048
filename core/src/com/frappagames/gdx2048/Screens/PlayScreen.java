@@ -22,45 +22,53 @@ import com.frappagames.gdx2048.Tools.GameInputProcessor;
 import com.frappagames.gdx2048.Tools.GameScreen;
 import com.frappagames.gdx2048.Tools.Tile;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
  * Main play screen
+ * <p/>
+ * TODO * Affichage des tuiles
+ * TODO * Affichage résultat de partie
+ * TODO * Annimation des tuiles
+ * TODO * Enregistrement et restitution du meilleur score
+ * TODO * Mode de jeu contre la montre
+ * TODO * Opt. : Partage de score Google Game
+ * TODO * Opt. : Hauts faits Google Game
  */
 public class PlayScreen extends GameScreen {
     private static final int GRID_WIDTH = 4;
     private static final int FRAME_THICKNESS = 16;
-    private       Tile[][] board;
-    private       int     score;
+    private Tile[][] board;
     private int currentScore;
     private int currentCell;
     private int bestScore;
     private int bestCell;
 
-    protected     Table      table;
+    protected Table table;
     private final TextButton replayBtn;
     private final TextButton menuBtn;
-    private final Image      titleImg;
-    private final Image      explanationImg;
-    private final Image      backgroundImg;
-    private BitmapFont       font;
-    private Label            currentScoreLbl;
-    private Label            bestScoreLbl;
+    private final Image titleImg;
+    private final Image explanationImg;
+    private final Image backgroundImg;
+    private BitmapFont font;
+    private Label currentScoreLbl;
+    private Label bestScoreLbl;
     private Random random;
+    private boolean gameIsOver;
 
     public PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
 
         currentScore = 0;
-        currentCell  = 0;
+        currentCell = 0;
         bestScore = 0;
-        bestCell  = 0;
+        bestCell = 0;
+        gameIsOver = false;
 
-        titleImg        = new Image(game.atlas.findRegion("title_small"));
-        explanationImg  = new Image(game.atlas.findRegion("explanation_text"));
-        backgroundImg   = new Image(game.atlas.findRegion("grid"));
-        this.random     = new Random();
+        titleImg = new Image(game.atlas.findRegion("title_small"));
+        explanationImg = new Image(game.atlas.findRegion("explanation_text"));
+        backgroundImg = new Image(game.atlas.findRegion("grid"));
+        this.random = new Random();
 
         Skin skin = new Skin();
         skin.addRegions(game.atlas);
@@ -73,7 +81,7 @@ public class PlayScreen extends GameScreen {
         redBtnSkin.down = skin.getDrawable("btn_small_gray");
 
         replayBtn = new TextButton("REJOUER", redBtnSkin);
-        menuBtn   = new TextButton("MENU", redBtnSkin);
+        menuBtn = new TextButton("MENU", redBtnSkin);
 
 
         LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
@@ -164,32 +172,135 @@ public class PlayScreen extends GameScreen {
     }
 
     public void move(Direction direction) {
+        if (gameIsOver) return;
+
+        boolean hasMove = false;
+
         switch (direction) {
             case UP:
                 Gdx.app.log("INFO", "Move UP");
-                showGrid();
+                for (int x = 0; x < 4; x++) {
+                    for (int y1 = 0; y1 < 3; y1++) {
+                        for (int y2 = y1 + 1; y2 < 4; y2++) {
+                            if (board[x][y1].getValue() == 0 && board[x][y2].getValue() != 0) {
+                                board[x][y1].setValue(board[x][y2].getValue());
+                                board[x][y2].setValue(0);
+                                hasMove = true;
+                            } else if (board[x][y1].getValue() != 0 && board[x][y1].getValue() == board[x][y2].getValue()) {
+                                int newValue = board[x][y1].getValue() * 2;
+                                board[x][y1].setValue(newValue);
+                                board[x][y2].setValue(0);
+                                updateScore(newValue, 0);
+                                hasMove = true;
+                                break;
+                            } else if (board[x][y2].getValue() != 0) {
+                                break;
+                            }
+                        }
+                    }
+                }
                 break;
             case DOWN:
                 Gdx.app.log("INFO", "Move DOWN");
-                showGrid();
+                for (int x = 0; x < 4; x++) {
+                    for (int y1 = 3; y1 >= 1; y1--) {
+                        for (int y2 = y1 - 1; y2 >= 0; y2--) {
+                            if (board[x][y1].getValue() == 0 && board[x][y2].getValue() != 0) {
+                                board[x][y1].setValue(board[x][y2].getValue());
+                                board[x][y2].setValue(0);
+                                hasMove = true;
+                            } else if (board[x][y1].getValue() != 0 && board[x][y1].getValue() == board[x][y2].getValue()) {
+                                int newValue = board[x][y1].getValue() * 2;
+                                board[x][y1].setValue(newValue);
+                                board[x][y2].setValue(0);
+                                updateScore(newValue, 0);
+                                hasMove = true;
+                                break;
+                            } else if (board[x][y2].getValue() != 0) {
+                                break;
+                            }
+                        }
+                    }
+                }
                 break;
             case LEFT:
                 Gdx.app.log("INFO", "Move LEFT");
-                showGrid();
+                for (int y = 0; y < 4; y++) {
+                    for (int x1 = 0; x1 < 3; x1++) {
+                        for (int x2 = x1 + 1; x2 < 4; x2++) {
+                            if (board[x1][y].getValue() == 0 && board[x2][y].getValue() != 0) {
+                                board[x1][y].setValue(board[x2][y].getValue());
+                                board[x2][y].setValue(0);
+                                hasMove = true;
+                            } else if (board[x1][y].getValue() != 0 && board[x1][y].getValue() == board[x2][y].getValue()) {
+                                int newValue = board[x1][y].getValue() * 2;
+                                board[x1][y].setValue(newValue);
+                                board[x2][y].setValue(0);
+                                updateScore(newValue, 0);
+                                hasMove = true;
+                                break;
+                            } else if (board[x2][y].getValue() != 0) {
+                                break;
+                            }
+                        }
+                    }
+                }
                 break;
             case RIGHT:
                 Gdx.app.log("INFO", "Move RIGHT");
-                showGrid();
+                for (int y = 0; y < 4; y++) {
+                    for (int x1 = 3; x1 >= 1; x1--) {
+                        for (int x2 = x1 - 1; x2 >= 0; x2--) {
+                            if (board[x1][y].getValue() == 0 && board[x2][y].getValue() != 0) {
+                                board[x1][y].setValue(board[x2][y].getValue());
+                                board[x2][y].setValue(0);
+                                hasMove = true;
+                            } else if (board[x1][y].getValue() != 0 && board[x1][y].getValue() == board[x2][y].getValue()) {
+                                int newValue = board[x1][y].getValue() * 2;
+                                board[x1][y].setValue(newValue);
+                                board[x2][y].setValue(0);
+                                updateScore(newValue, 0);
+                                hasMove = true;
+                                break;
+                            } else if (board[x2][y].getValue() != 0) {
+                                break;
+                            }
+                        }
+                    }
+                }
                 break;
+        }
+
+        if (hasMove) {
+            // Ajout d'une nouvelle tuile
+            addRandomTile();
+
+            // Affichage de la grille
+            showGrid();
+
+            // Vérification de l'état du jeu
+            if (isGameOver()) {
+                if (currentCell >= 2048) {
+                    Gdx.app.log("INFO", "You WIN !!!");
+                } else {
+                    Gdx.app.log("INFO", "Game Over");
+                }
+                gameIsOver = true;
+            }
         }
     }
 
     public void showGrid() {
-        System.out.println(Arrays.deepToString(board));
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 4; x++) {
+                System.out.print(String.valueOf(board[x][y].getValue()) + ' ');
+            }
+            System.out.println();
+        }
     }
 
     private boolean isGameOver() {
-        return (this.checkCellAvailable() || checkMoveAvailable());
+        return !(checkCellAvailable() || checkMoveAvailable());
     }
 
     /**
@@ -224,12 +335,14 @@ public class PlayScreen extends GameScreen {
     }
 
     private void addRandomTile() {
-        int value = (random.nextInt(10) < 9) ?  2 : 4;
+        if (!checkCellAvailable()) return;
+
+        int value = (random.nextInt(10) < 9) ? 2 : 4;
 
         boolean locationFound = false;
-        while(!locationFound) {
-            int x = random.nextInt(3);
-            int y = random.nextInt(3);
+        while (!locationFound) {
+            int x = random.nextInt(4);
+            int y = random.nextInt(4);
             if (board[x][y].isZeroValue()) {
                 board[x][y].setValue(value);
                 locationFound = true;
@@ -240,36 +353,17 @@ public class PlayScreen extends GameScreen {
     }
 
     private void updateScore(int value, int cellValue) {
+        // Update current score
         currentScore += value;
-        currentCell   = (cellValue > currentCell) ? cellValue : currentCell;
+        currentScoreLbl.setText(String.valueOf(currentScore));
+
+        // Update best score
+        bestScore = (currentScore > bestScore) ? currentScore : bestScore;
+        bestScoreLbl.setText(String.valueOf(bestScore));
+
+        // Update best cell
+        currentCell = (cellValue > currentCell) ? cellValue : currentCell;
     }
-
-
-    private void moveCellsTop() {
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = GRID_WIDTH - 1; y > 0; y--) {
-                if (board[x][y - 1].isZeroValue() && !board[x][y].isZeroValue()) {
-                    board[x][y].setValue(board[x][y + 1].getValue());
-                    board[x][y + 1].setValue(0);
-                }
-            }
-        }
-    }
-    private void moveCellsBottom() {
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < (GRID_WIDTH - 1); y++) {
-                if (board[x][y].isZeroValue() && !board[x][y + 1].isZeroValue()) {
-                    board[x][y].setValue(board[x][y + 1].getValue());
-                    board[x][y + 1].setValue(0);
-                }
-            }
-        }
-    }
-
-    private void mergeCells(int x, int y) {
-
-    }
-
 
     @Override
     public void dispose() {
