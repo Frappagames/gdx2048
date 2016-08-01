@@ -42,11 +42,11 @@ abstract public class GameScreen implements Screen  {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
-        update(delta);
-        draw(delta);
-
         stage.act(delta);
         stage.draw();
+
+        update(delta);
+        draw(delta);
     }
 
     @Override

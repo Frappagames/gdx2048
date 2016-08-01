@@ -1,18 +1,24 @@
 package com.frappagames.gdx2048.Tools;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.frappagames.gdx2048.Gdx2048;
 
 /**
  * Created by gfp on 11/07/16.
  */
 public class Tile {
-    private static final int CELL_WIDTH = 120;
+    private static final int CELL_WIDTH = 135;
+    private final SpriteBatch batch;
+    private final TextureAtlas atlas;
     private int value;
 
     private Vector2 cellLocation;
 
-    public Tile(int value) {
+    public Tile(Gdx2048 game, int value) {
+        this.batch = game.batch;
+        this.atlas = game.atlas;
         setValue(value);
     }
 
@@ -40,7 +46,14 @@ public class Tile {
         this.cellLocation = cellLocation;
     }
 
-    public void draw(Batch batch) {
+    public void draw() {
+        if (!isZeroValue()) {
+            batch.draw(
+                    atlas.findRegion("tile" + String.valueOf(this.getValue())),
+                    cellLocation.x,
+                    cellLocation.y
+            );
+        }
     }
 
     @Override

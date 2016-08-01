@@ -26,8 +26,7 @@ import java.util.Random;
 
 /**
  * Main play screen
- * <p/>
- * TODO * Affichage des tuiles
+ *
  * TODO * Affichage résultat de partie
  * TODO * Annimation des tuiles
  * TODO * Enregistrement et restitution du meilleur score
@@ -37,7 +36,7 @@ import java.util.Random;
  */
 public class PlayScreen extends GameScreen {
     private static final int GRID_WIDTH = 4;
-    private static final int FRAME_THICKNESS = 16;
+    private static final int FRAME_THICKNESS = 20;
     private Tile[][] board;
     private int currentScore;
     private int currentCell;
@@ -49,12 +48,14 @@ public class PlayScreen extends GameScreen {
     private final TextButton menuBtn;
     private final Image titleImg;
     private final Image explanationImg;
-    private final Image backgroundImg;
+    private final Image gridImg;
     private BitmapFont font;
     private Label currentScoreLbl;
     private Label bestScoreLbl;
     private Random random;
     private boolean gameIsOver;
+
+    private final int gutterSize;
 
     public PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
@@ -64,10 +65,11 @@ public class PlayScreen extends GameScreen {
         bestScore = 0;
         bestCell = 0;
         gameIsOver = false;
+        gutterSize = stage.getViewport().getLeftGutterWidth();
 
         titleImg = new Image(game.atlas.findRegion("title_small"));
         explanationImg = new Image(game.atlas.findRegion("explanation_text"));
-        backgroundImg = new Image(game.atlas.findRegion("grid"));
+        gridImg = new Image(game.atlas.findRegion("grid"));
         this.random = new Random();
 
         Skin skin = new Skin();
@@ -123,7 +125,7 @@ public class PlayScreen extends GameScreen {
         table.add(replayBtn).pad(10);
         table.add(menuBtn).pad(10).row();
 
-        table.add(backgroundImg).pad(100, 0, 50, 0).colspan(3).row();
+        table.add(gridImg).pad(100, 0, 50, 0).colspan(3).row();
 
         table.add().colspan(2);
         table.add().row();
@@ -148,14 +150,16 @@ public class PlayScreen extends GameScreen {
     }
 
     public void initializeGrid() {
-        int xx = FRAME_THICKNESS;
+        int xx = 100;
+
         for (int x = 0; x < GRID_WIDTH; x++) {
-            int yy = FRAME_THICKNESS;
+            int yy = 720;
+
             for (int y = 0; y < GRID_WIDTH; y++) {
-                Tile cell = new Tile(0);
+                Tile cell = new Tile(game, 0);
                 cell.setCellLocation(xx, yy);
                 board[x][y] = cell;
-                yy += FRAME_THICKNESS + Tile.getCellWidth();
+                yy -= FRAME_THICKNESS + Tile.getCellWidth();
             }
             xx += FRAME_THICKNESS + Tile.getCellWidth();
         }
@@ -163,12 +167,11 @@ public class PlayScreen extends GameScreen {
 
     @Override
     public void update(float delta) {
-        stage.act(delta);
     }
 
     @Override
     public void draw(float delta) {
-        stage.draw();
+        showGrid();
     }
 
     public void move(Direction direction) {
@@ -178,7 +181,6 @@ public class PlayScreen extends GameScreen {
 
         switch (direction) {
             case UP:
-                Gdx.app.log("INFO", "Move UP");
                 for (int x = 0; x < 4; x++) {
                     for (int y1 = 0; y1 < 3; y1++) {
                         for (int y2 = y1 + 1; y2 < 4; y2++) {
@@ -201,7 +203,6 @@ public class PlayScreen extends GameScreen {
                 }
                 break;
             case DOWN:
-                Gdx.app.log("INFO", "Move DOWN");
                 for (int x = 0; x < 4; x++) {
                     for (int y1 = 3; y1 >= 1; y1--) {
                         for (int y2 = y1 - 1; y2 >= 0; y2--) {
@@ -224,7 +225,6 @@ public class PlayScreen extends GameScreen {
                 }
                 break;
             case LEFT:
-                Gdx.app.log("INFO", "Move LEFT");
                 for (int y = 0; y < 4; y++) {
                     for (int x1 = 0; x1 < 3; x1++) {
                         for (int x2 = x1 + 1; x2 < 4; x2++) {
@@ -247,7 +247,6 @@ public class PlayScreen extends GameScreen {
                 }
                 break;
             case RIGHT:
-                Gdx.app.log("INFO", "Move RIGHT");
                 for (int y = 0; y < 4; y++) {
                     for (int x1 = 3; x1 >= 1; x1--) {
                         for (int x2 = x1 - 1; x2 >= 0; x2--) {
@@ -291,12 +290,13 @@ public class PlayScreen extends GameScreen {
     }
 
     public void showGrid() {
+        game.batch.begin();
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {
-                System.out.print(String.valueOf(board[x][y].getValue()) + ' ');
+                board[x][y].draw();
             }
-            System.out.println();
         }
+        game.batch.end();
     }
 
     private boolean isGameOver() {
