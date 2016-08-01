@@ -55,8 +55,6 @@ public class PlayScreen extends GameScreen {
     private Random random;
     private boolean gameIsOver;
 
-    private final int gutterSize;
-
     public PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
 
@@ -65,7 +63,6 @@ public class PlayScreen extends GameScreen {
         bestScore = 0;
         bestCell = 0;
         gameIsOver = false;
-        gutterSize = stage.getViewport().getLeftGutterWidth();
 
         titleImg = new Image(game.atlas.findRegion("title_small"));
         explanationImg = new Image(game.atlas.findRegion("explanation_text"));
