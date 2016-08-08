@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -27,7 +28,6 @@ import java.util.Random;
 /**
  * Main play screen
  *
- * TODO * Affichage résultat de partie
  * TODO * Annimation des tuiles
  * TODO * Enregistrement et restitution du meilleur score
  * TODO * Mode de jeu contre la montre
@@ -37,6 +37,7 @@ import java.util.Random;
 public class PlayScreen extends GameScreen {
     private static final int GRID_WIDTH = 4;
     private static final int FRAME_THICKNESS = 20;
+    private final Label gameOverLbl;
     private Tile[][] board;
     private int currentScore;
     private int currentCell;
@@ -54,6 +55,7 @@ public class PlayScreen extends GameScreen {
     private Label bestScoreLbl;
     private Random random;
     private boolean gameIsOver;
+    private LabelStyle labelStyle2;
 
     public PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
@@ -140,6 +142,20 @@ public class PlayScreen extends GameScreen {
 
         board = new Tile[4][4];
         initializeGrid();
+
+
+
+        // Define Game OVer Screen
+        BitmapFont font40 = new BitmapFont(Gdx.files.internal("cooper-40-white.fnt"), false);
+        labelStyle2 = new LabelStyle(font40, Color.WHITE);
+        labelStyle2.background = skin.getDrawable("mask_yellow");
+        gameOverLbl = new Label("", labelStyle2);
+        gameOverLbl.setSize(640, 640);
+        gameOverLbl.setAlignment(Align.center);
+        gameOverLbl.setPosition(80, 233);
+        gameOverLbl.setVisible(false);
+
+        stage2.addActor(gameOverLbl);
 
         addRandomTile();
         addRandomTile();
@@ -277,10 +293,20 @@ public class PlayScreen extends GameScreen {
             // Vérification de l'état du jeu
             if (isGameOver()) {
                 if (currentCell >= 2048) {
-                    Gdx.app.log("INFO", "You WIN !!!");
+                    gameOverLbl.setText("Vous avez GAGNÉ !!!");
                 } else {
-                    Gdx.app.log("INFO", "Game Over");
+                    gameOverLbl.setText("Vous avez perdu !");
                 }
+                gameOverLbl.setVisible(true);
+                AlphaAction resetAlphaAction = new AlphaAction();
+                resetAlphaAction.setAlpha(0);
+                gameOverLbl.addAction(resetAlphaAction);
+
+                AlphaAction setAlphaAction = new AlphaAction();
+                setAlphaAction.setAlpha(1);
+                setAlphaAction.setDuration(0.5f);
+                setAlphaAction.finish();
+                gameOverLbl.addAction(setAlphaAction);
                 gameIsOver = true;
             }
         }

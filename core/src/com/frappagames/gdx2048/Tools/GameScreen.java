@@ -17,12 +17,14 @@ abstract public class GameScreen implements Screen  {
     private final Viewport viewport;
     protected Gdx2048 game;
     protected Stage stage;
+    protected Stage stage2;
 
     public GameScreen(Gdx2048 game) {
         this.game = game;
         camera    = new OrthographicCamera();
         viewport  = new FitViewport(Gdx2048.WIDTH, Gdx2048.HEIGHT, camera);
         stage     = new Stage(viewport);
+        stage2    = new Stage(viewport);
 
         camera.position.set(Gdx2048.WIDTH / 2, Gdx2048.HEIGHT / 2, 0);
     }
@@ -47,6 +49,9 @@ abstract public class GameScreen implements Screen  {
 
         update(delta);
         draw(delta);
+
+        stage2.act(delta);
+        stage2.draw();
     }
 
     @Override
