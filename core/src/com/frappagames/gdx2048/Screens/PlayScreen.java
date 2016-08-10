@@ -31,7 +31,8 @@ import java.util.Random;
  * Main play screen
  *
  * TODO * Animation des tuiles
- * TODO * Mode de jeu contre la montre
+ * TODO : Affichage (animé) de l'ajout de score
+ * TODO : Affichage lien "plus de jeux sur frappagames.github.io"
  * TODO * Opt. : Partage de score Google Game
  * TODO * Opt. : Hauts faits Google Game
  */
