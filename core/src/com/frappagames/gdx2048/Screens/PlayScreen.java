@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.frappagames.gdx2048.Gdx2048;
 import com.frappagames.gdx2048.Gdx2048.Direction;
 import com.frappagames.gdx2048.Gdx2048.GameType;
@@ -37,6 +38,7 @@ import java.util.Random;
 public class PlayScreen extends GameScreen {
     private static final int GRID_WIDTH = 4;
     private static final int FRAME_THICKNESS = 20;
+    private static final int SPAWN_SPEED_MS = 1000;
     private final Label gameOverLbl;
     private Tile[][] board;
     private int currentScore;
@@ -44,6 +46,7 @@ public class PlayScreen extends GameScreen {
     private int bestScore;
     private int bestCell;
     private GameType gameType;
+    private long lastSpawnTime;
 
     protected Table table;
     private final TextButton replayBtn;
@@ -182,6 +185,16 @@ public class PlayScreen extends GameScreen {
 
     @Override
     public void update(float delta) {
+        // check if we need to add a new cell
+        if (!gameIsOver) {
+            if (TimeUtils.nanoTime() - lastSpawnTime > (SPAWN_SPEED_MS * 1000000)) {
+                if (checkCellAvailable()) {
+                    addRandomTile();
+                } else {
+                    setGameOver();
+                }
+            }
+        }
     }
 
     @Override
@@ -294,24 +307,28 @@ public class PlayScreen extends GameScreen {
 
             // Vérification de l'état du jeu
             if (isGameOver()) {
-                if (currentCell >= 2048) {
-                    gameOverLbl.setText("Vous avez GAGNÉ !!!");
-                } else {
-                    gameOverLbl.setText("Vous avez perdu !");
-                }
-                gameOverLbl.setVisible(true);
-                AlphaAction resetAlphaAction = new AlphaAction();
-                resetAlphaAction.setAlpha(0);
-                gameOverLbl.addAction(resetAlphaAction);
-
-                AlphaAction setAlphaAction = new AlphaAction();
-                setAlphaAction.setAlpha(1);
-                setAlphaAction.setDuration(0.5f);
-                setAlphaAction.finish();
-                gameOverLbl.addAction(setAlphaAction);
-                gameIsOver = true;
+                setGameOver();
             }
         }
+    }
+
+    private void setGameOver() {
+        if (currentCell >= 2048) {
+            gameOverLbl.setText("Vous avez GAGNÉ !!!");
+        } else {
+            gameOverLbl.setText("Vous avez perdu !");
+        }
+        gameOverLbl.setVisible(true);
+        AlphaAction resetAlphaAction = new AlphaAction();
+        resetAlphaAction.setAlpha(0);
+        gameOverLbl.addAction(resetAlphaAction);
+
+        AlphaAction setAlphaAction = new AlphaAction();
+        setAlphaAction.setAlpha(1);
+        setAlphaAction.setDuration(0.5f);
+        setAlphaAction.finish();
+        gameOverLbl.addAction(setAlphaAction);
+        gameIsOver = true;
     }
 
     public void showGrid() {
@@ -375,6 +392,7 @@ public class PlayScreen extends GameScreen {
         }
 
         updateScore(0, value);
+        lastSpawnTime = TimeUtils.nanoTime();
     }
 
     private void updateScore(int value, int cellValue) {

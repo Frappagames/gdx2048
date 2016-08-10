@@ -16,8 +16,11 @@ public class Settings {
     private static Preferences settings;
 
     public static void load() {
-        settings     = Gdx.app.getPreferences("com.frappagames.gdx2048.settings");
-        bestScore    = settings.getInteger("best_score", 0);
+        settings          = Gdx.app.getPreferences("com.frappagames.gdx2048.settings");
+        bestScore         = settings.getInteger("best_score", 0);
+        bestCell          = settings.getInteger("best_cell", 0);
+        bestScoreTimeGame = settings.getInteger("best_score_time_game", 0);
+        bestCellTimeGame  = settings.getInteger("best_cell_time_game", 0);
     }
 
     public static Integer getBestScore() {
