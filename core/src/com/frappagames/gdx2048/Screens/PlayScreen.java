@@ -21,6 +21,7 @@ import com.frappagames.gdx2048.Gdx2048.GameType;
 import com.frappagames.gdx2048.Tools.GameGestureListener;
 import com.frappagames.gdx2048.Tools.GameInputProcessor;
 import com.frappagames.gdx2048.Tools.GameScreen;
+import com.frappagames.gdx2048.Tools.Settings;
 import com.frappagames.gdx2048.Tools.Tile;
 
 import java.util.Random;
@@ -28,8 +29,7 @@ import java.util.Random;
 /**
  * Main play screen
  *
- * TODO * Annimation des tuiles
- * TODO * Enregistrement et restitution du meilleur score
+ * TODO * Animation des tuiles
  * TODO * Mode de jeu contre la montre
  * TODO * Opt. : Partage de score Google Game
  * TODO * Opt. : Hauts faits Google Game
@@ -43,6 +43,7 @@ public class PlayScreen extends GameScreen {
     private int currentCell;
     private int bestScore;
     private int bestCell;
+    private GameType gameType;
 
     protected Table table;
     private final TextButton replayBtn;
@@ -60,10 +61,11 @@ public class PlayScreen extends GameScreen {
     public PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
 
+        this.gameType = gameType;
         currentScore = 0;
         currentCell = 0;
-        bestScore = 0;
-        bestCell = 0;
+        bestScore = (gameType == GameType.CLASSIC) ? Settings.getBestScore() : Settings.getBestScoreTimeGame();
+        bestCell = (gameType == GameType.CLASSIC) ? Settings.getBestCell() : Settings.getBestCellTimeGame();
         gameIsOver = false;
 
         titleImg = new Image(game.atlas.findRegion("title_small"));
@@ -381,11 +383,25 @@ public class PlayScreen extends GameScreen {
         currentScoreLbl.setText(String.valueOf(currentScore));
 
         // Update best score
-        bestScore = (currentScore > bestScore) ? currentScore : bestScore;
-        bestScoreLbl.setText(String.valueOf(bestScore));
+        if (currentScore > bestScore) {
+            bestScore = currentScore;
+            if (gameType == GameType.CLASSIC) {
+                Settings.setBestScore(currentScore);
+            } else {
+                Settings.setBestScoreTimeGame(currentScore);
+            }
+            bestScoreLbl.setText(String.valueOf(bestScore));
+        }
 
         // Update best cell
-        currentCell = (cellValue > currentCell) ? cellValue : currentCell;
+        if (cellValue > bestCell) {
+            bestCell = cellValue;
+            if (gameType == GameType.CLASSIC) {
+                Settings.setBestCell(cellValue);
+            } else {
+                Settings.setBestCellTimeGame(cellValue);
+            }
+        }
     }
 
     @Override

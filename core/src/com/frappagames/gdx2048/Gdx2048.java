@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.frappagames.gdx2048.Screens.MenuScreen;
+import com.frappagames.gdx2048.Tools.Settings;
 
 public class Gdx2048 extends Game {
 	public SpriteBatch batch;
@@ -27,6 +28,7 @@ public class Gdx2048 extends Game {
 		batch 	   = new SpriteBatch();
 		clearColor = Color.valueOf("#FAF8EFFF");
 		atlas      = new TextureAtlas(Gdx.files.internal("2048.pack"));
+		Settings.load();
 
 		setScreen(new MenuScreen(this));
 	}
