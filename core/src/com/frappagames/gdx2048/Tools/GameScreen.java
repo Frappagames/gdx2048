@@ -27,6 +27,8 @@ abstract public class GameScreen implements Screen  {
         stage2    = new Stage(viewport);
 
         camera.position.set(Gdx2048.WIDTH / 2, Gdx2048.HEIGHT / 2, 0);
+
+        Gdx.graphics.setContinuousRendering(false);
     }
 
     @Override
