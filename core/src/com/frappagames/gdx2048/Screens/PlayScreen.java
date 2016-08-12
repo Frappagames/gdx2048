@@ -233,6 +233,7 @@ public class PlayScreen extends GameScreen {
 
             if (TimeUtils.nanoTime() - lastSpawnTime > (SPAWN_SPEED_MS * 1000000)) {
                 if (checkCellAvailable()) {
+                    updateScore(5, 0);
                     addRandomTile();
                 } else {
                     setGameOver();
@@ -343,6 +344,9 @@ public class PlayScreen extends GameScreen {
                 break;
         }
 
+        if ((gameType == GameType.TIME) && (addScore != 0)) {
+            addScore += 5;
+        }
         updateScore(addScore, 0);
 
         if (hasMove) {
