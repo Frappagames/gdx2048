@@ -5,7 +5,9 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -31,8 +33,8 @@ import java.util.Random;
  * Main play screen
  *
  * TODO * Animation des tuiles
- * TODO : Affichage (animé) de l'ajout de score
  * TODO : Affichage lien "plus de jeux sur frappagames.github.io"
+ * TODO : Sauvegarde et restauration de partie
  * TODO * Opt. : Partage de score Google Game
  * TODO * Opt. : Hauts faits Google Game
  */
@@ -41,6 +43,9 @@ public class PlayScreen extends GameScreen {
     private static final int FRAME_THICKNESS = 20;
     private static final int SPAWN_SPEED_MS = 1000;
     private final Label gameOverLbl;
+    private Label addScoreLbl;
+    private Label currentScoreLbl;
+    private Label bestScoreLbl;
     private Tile[][] board;
     private int currentScore;
     private int currentCell;
@@ -56,8 +61,6 @@ public class PlayScreen extends GameScreen {
     private final Image explanationImg;
     private final Image gridImg;
     private BitmapFont font;
-    private Label currentScoreLbl;
-    private Label bestScoreLbl;
     private Random random;
     private boolean gameIsOver;
     private LabelStyle labelStyle2;
@@ -66,21 +69,20 @@ public class PlayScreen extends GameScreen {
         super(game);
 
         this.gameType = gameType;
-        currentScore = 0;
-        currentCell = 0;
-        bestScore = (gameType == GameType.CLASSIC) ? Settings.getBestScore() : Settings.getBestScoreTimeGame();
-        bestCell = (gameType == GameType.CLASSIC) ? Settings.getBestCell() : Settings.getBestCellTimeGame();
-        gameIsOver = false;
+        currentScore  = 0;
+        currentCell   = 0;
+        bestScore     = (gameType == GameType.CLASSIC) ? Settings.getBestScore() : Settings.getBestScoreTimeGame();
+        bestCell      = (gameType == GameType.CLASSIC) ? Settings.getBestCell() : Settings.getBestCellTimeGame();
+        gameIsOver    = false;
 
-        titleImg = new Image(game.atlas.findRegion("title_small"));
+        titleImg       = new Image(game.atlas.findRegion("title_small"));
         explanationImg = new Image(game.atlas.findRegion("explanation_text"));
-        gridImg = new Image(game.atlas.findRegion("grid"));
-        this.random = new Random();
+        gridImg        = new Image(game.atlas.findRegion("grid"));
+        font           = new BitmapFont(Gdx.files.internal("cooper-32-white.fnt"), false);
+        this.random    = new Random();
 
         Skin skin = new Skin();
         skin.addRegions(game.atlas);
-
-        font = new BitmapFont(Gdx.files.internal("cooper-32-white.fnt"), false);
 
         TextButton.TextButtonStyle redBtnSkin = new TextButton.TextButtonStyle();
         redBtnSkin.font = font;
@@ -106,6 +108,13 @@ public class PlayScreen extends GameScreen {
         bestScoreContainer.add(bestScoreLbl).pad(70, 10, 10, 10);
         bestScoreContainer.setBackground(skin.getDrawable("best_score"));
 
+        LabelStyle labelStyleAddScore = new LabelStyle(font, Color.valueOf("#E8BB31FF"));
+        addScoreLbl = new Label("", labelStyleAddScore);
+        addScoreLbl.setAlignment(Align.center, Align.bottom);
+        addScoreLbl.setPosition(305, 1090);
+        addScoreLbl.setWidth(200);
+        addScoreLbl.setVisible(false);
+        stage2.addActor(addScoreLbl);
 
         replayBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
@@ -187,7 +196,7 @@ public class PlayScreen extends GameScreen {
     @Override
     public void update(float delta) {
         // check if we need to add a new cell
-        if (!gameIsOver) {
+        if (!gameIsOver && gameType == GameType.TIME) {
             if (TimeUtils.nanoTime() - lastSpawnTime > (SPAWN_SPEED_MS * 1000000)) {
                 if (checkCellAvailable()) {
                     addRandomTile();
@@ -207,6 +216,7 @@ public class PlayScreen extends GameScreen {
         if (gameIsOver) return;
 
         boolean hasMove = false;
+        int addScore = 0;
 
         switch (direction) {
             case UP:
@@ -221,7 +231,7 @@ public class PlayScreen extends GameScreen {
                                 int newValue = board[x][y1].getValue() * 2;
                                 board[x][y1].setValue(newValue);
                                 board[x][y2].setValue(0);
-                                updateScore(newValue, 0);
+                                addScore += newValue;
                                 hasMove = true;
                                 break;
                             } else if (board[x][y2].getValue() != 0) {
@@ -243,7 +253,7 @@ public class PlayScreen extends GameScreen {
                                 int newValue = board[x][y1].getValue() * 2;
                                 board[x][y1].setValue(newValue);
                                 board[x][y2].setValue(0);
-                                updateScore(newValue, 0);
+                                addScore += newValue;
                                 hasMove = true;
                                 break;
                             } else if (board[x][y2].getValue() != 0) {
@@ -265,7 +275,7 @@ public class PlayScreen extends GameScreen {
                                 int newValue = board[x1][y].getValue() * 2;
                                 board[x1][y].setValue(newValue);
                                 board[x2][y].setValue(0);
-                                updateScore(newValue, 0);
+                                addScore += newValue;
                                 hasMove = true;
                                 break;
                             } else if (board[x2][y].getValue() != 0) {
@@ -287,7 +297,7 @@ public class PlayScreen extends GameScreen {
                                 int newValue = board[x1][y].getValue() * 2;
                                 board[x1][y].setValue(newValue);
                                 board[x2][y].setValue(0);
-                                updateScore(newValue, 0);
+                                addScore += newValue;
                                 hasMove = true;
                                 break;
                             } else if (board[x2][y].getValue() != 0) {
@@ -298,6 +308,8 @@ public class PlayScreen extends GameScreen {
                 }
                 break;
         }
+
+        updateScore(addScore, 0);
 
         if (hasMove) {
             // Ajout d'une nouvelle tuile
@@ -398,8 +410,20 @@ public class PlayScreen extends GameScreen {
 
     private void updateScore(int value, int cellValue) {
         // Update current score
-        currentScore += value;
-        currentScoreLbl.setText(String.valueOf(currentScore));
+        if (value > 0) {
+            addScoreLbl.setText("+" + String.valueOf(value));
+            addScoreLbl.setVisible(true);
+            addScoreLbl.addAction(Actions.sequence(
+                    Actions.alpha(1),
+                    Actions.moveTo(305, 1090),
+                    Actions.parallel(
+                            Actions.fadeOut(0.5f, Interpolation.circleIn),
+                            Actions.moveTo(305, 1120, 0.5f, Interpolation.circleOut)
+                    )
+            ));
+            currentScore += value;
+            currentScoreLbl.setText(String.valueOf(currentScore));
+        }
 
         // Update best score
         if (currentScore > bestScore) {
@@ -410,6 +434,7 @@ public class PlayScreen extends GameScreen {
                 Settings.setBestScoreTimeGame(currentScore);
             }
             bestScoreLbl.setText(String.valueOf(bestScore));
+
         }
 
         // Update best cell
