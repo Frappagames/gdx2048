@@ -42,6 +42,7 @@ public class PlayScreen extends GameScreen {
     private static final int FRAME_THICKNESS = 20;
     private static final int SPAWN_SPEED_MS = 1000;
     private static final int GRID_Y = 750;
+    private static final int SCORE_Y = 1150;
     private final Label gameOverLbl;
     private final Label timeLbl;
     private final Label movementsLbl;
@@ -119,7 +120,7 @@ public class PlayScreen extends GameScreen {
         LabelStyle labelStyleAddScore = new LabelStyle(font, Color.valueOf("#E8BB31FF"));
         addScoreLbl = new Label("", labelStyleAddScore);
         addScoreLbl.setAlignment(Align.center, Align.bottom);
-        addScoreLbl.setPosition(305, 1090);
+        addScoreLbl.setPosition(305, SCORE_Y);
         addScoreLbl.setWidth(200);
         addScoreLbl.setVisible(false);
         stage2.addActor(addScoreLbl);
@@ -456,10 +457,10 @@ public class PlayScreen extends GameScreen {
             addScoreLbl.setVisible(true);
             addScoreLbl.addAction(Actions.sequence(
                     Actions.alpha(1),
-                    Actions.moveTo(305, 1090),
+                    Actions.moveTo(305, SCORE_Y),
                     Actions.parallel(
                             Actions.fadeOut(0.5f, Interpolation.circleIn),
-                            Actions.moveTo(305, 1120, 0.5f, Interpolation.circleOut)
+                            Actions.moveTo(305, SCORE_Y + 30, 0.5f, Interpolation.circleOut)
                     )
             ));
             currentScore += value;
