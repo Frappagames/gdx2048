@@ -15,7 +15,7 @@
    viewBox="0 0 799.99996 1280"
    id="svg3336"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.91 r"
    sodipodi:docname="design.svg">
   <defs
      id="defs3338" />
@@ -27,10 +27,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.5"
-     inkscape:cx="-80.948616"
-     inkscape:cy="578.11506"
+     inkscape:cx="-96.94862"
+     inkscape:cy="636.11506"
      inkscape:document-units="px"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer6"
      showgrid="false"
      units="px"
      inkscape:showpageshadow="false"
@@ -39,10 +39,10 @@
      showguides="true"
      inkscape:guide-bbox="true"
      gridtolerance="10"
-     inkscape:window-width="1440"
-     inkscape:window-height="850"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1">
     <sodipodi:guide
        position="1420.7142,886.42857"
@@ -60,6 +60,10 @@
        id="guide4433"
        inkscape:label=""
        inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="511.99997,1154"
+       orientation="0,1"
+       id="guide3825" />
   </sodipodi:namedview>
   <metadata
      id="metadata3341">
@@ -84,7 +88,7 @@
        id="rect3344"
        width="800"
        height="1280"
-       x="-3.0517578e-005"
+       x="-3.0517578e-05"
        y="-227.63783" />
     <rect
        style="display:inline;fill:#e8bb31;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
@@ -2239,12 +2243,23 @@
          id="rect4764-33-6-3"
          style="fill:#afa08f;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" />
     </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:35px;line-height:100%;font-family:'Cooper Black';-inkscape-font-specification:'Cooper Black, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#e8bb31;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="377.99997"
+       y="108"
+       id="text3823"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3825"
+         x="377.99997"
+         y="108">+16</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="Tuiles"
-     style="display:none">
+     style="display:inline">
     <g
        id="g5931">
       <g
@@ -2484,7 +2499,7 @@
     </g>
     <g
        transform="translate(822.22031,-72.293152)"
-       style="display:inline"
+       style="display:inline;fill:#edc22e;fill-opacity:1"
        id="g5591">
       <rect
          ry="20"
@@ -2500,9 +2515,9 @@
          id="text4164-1-2-0-2"
          y="813.63019"
          x="-401.45682"
-         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:45px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:45px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#edc22e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:45px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff"
+           style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:45px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#edc22e;fill-opacity:1"
            y="813.63019"
            x="-401.45682"
            id="tspan4166-3-76-3-6"
