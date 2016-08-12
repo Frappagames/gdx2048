@@ -33,7 +33,6 @@ import java.util.Random;
  * Main play screen
  *
  * TODO * Animation des tuiles
- * TODO : Affichage lien "plus de jeux sur frappagames.github.io"
  * TODO : Sauvegarde et restauration de partie
  * TODO * Opt. : Partage de score Google Game
  * TODO * Opt. : Hauts faits Google Game
