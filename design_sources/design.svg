@@ -27,10 +27,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.5"
-     inkscape:cx="-383.94862"
-     inkscape:cy="632.11506"
+     inkscape:cx="-51.390525"
+     inkscape:cy="815.09514"
      inkscape:document-units="px"
-     inkscape:current-layer="g5591"
+     inkscape:current-layer="layer4"
      showgrid="false"
      units="px"
      inkscape:showpageshadow="false"
@@ -1744,7 +1744,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="Jeu"
-     style="display:inline">
+     style="display:none">
     <g
        id="g5472">
       <rect
@@ -2259,7 +2259,7 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="Tuiles"
-     style="display:inline">
+     style="display:none">
     <g
        id="g5931">
       <g
@@ -2515,9 +2515,9 @@
          id="text4164-1-2-0-2"
          y="813.63019"
          x="-401.45682"
-         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:45px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:45px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:45px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;"
+           style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:45px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1"
            y="813.63019"
            x="-401.45682"
            id="tspan4166-3-76-3-6"
@@ -2735,26 +2735,25 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Menu"
-     style="display:none"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer4"
        inkscape:label="Boutons">
       <text
          xml:space="preserve"
-         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:90px;line-height:125%;font-family:odstemplik;-inkscape-font-specification:'odstemplik, Bold Italic';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#93816e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="color:#000000;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:90px;line-height:125%;font-family:odstemplik;-inkscape-font-specification:'odstemplik, Bold Italic';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#93816e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
          x="148.74458"
-         y="1212.7207"
+         y="1122.7207"
          id="text4246"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
            id="tspan4248"
            x="148.74458"
-           y="1212.7207">Jérémy Moreau</tspan></text>
+           y="1122.7207">Jérémy Moreau</tspan></text>
       <g
          id="g3579"
-         transform="translate(0,86.589691)">
+         transform="translate(0,-3.410309)">
         <rect
            ry="10"
            rx="10"
@@ -2778,7 +2777,7 @@
       </g>
       <g
          id="g4246"
-         transform="translate(0,80.282981)">
+         transform="translate(0,20.282981)">
         <rect
            ry="10"
            rx="10"
@@ -2802,7 +2801,7 @@
       </g>
       <g
          id="g4238"
-         transform="translate(0,74.262711)">
+         transform="translate(0,4.262711)">
         <rect
            ry="10"
            rx="10"
@@ -2826,7 +2825,7 @@
       </g>
       <g
          id="g4294"
-         transform="translate(0,82.262711)">
+         transform="translate(0,32.262711)">
         <rect
            ry="10"
            rx="10"
@@ -2854,40 +2853,62 @@
          width="490.71426"
          height="101.42857"
          x="154.64284"
-         y="288.57141"
+         y="268.57141"
          rx="10"
          ry="10" />
       <text
          xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          x="232.57091"
-         y="349.8273"
+         y="329.8273"
          id="text4165"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
            id="tspan4167"
            x="232.57091"
-           y="349.8273">Partie classique</tspan></text>
+           y="329.8273">Partie classique</tspan></text>
       <rect
          style="fill:#f1664d;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
          id="rect4202-3-54"
          width="490.71426"
          height="101.42857"
          x="154.64284"
-         y="418.57144"
+         y="388.57144"
          rx="10"
          ry="10" />
       <text
          xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          x="214.48029"
-         y="483.30573"
+         y="453.30573"
          id="text4165-72-31"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
            id="tspan4167-5-7"
            x="214.48029"
-           y="483.30573">Contre la montre</tspan></text>
+           y="453.30573">Contre la montre</tspan></text>
+      <text
+         xml:space="preserve"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Cooper Black';-inkscape-font-specification:'Cooper Black, Normal';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#5f594e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;"
+         x="239.80466"
+         y="1202.7207"
+         id="text4246-3"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4248-5"
+           x="239.80466"
+           y="1202.7207">Plus de jeux sur</tspan></text>
+      <text
+         xml:space="preserve"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Cooper Black';-inkscape-font-specification:'Cooper Black, Normal';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#afa08f;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;"
+         x="100.12692"
+         y="1242.7207"
+         id="text4246-6"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4248-2"
+           x="100.12692"
+           y="1242.7207">http://frappagames.github.io</tspan></text>
     </g>
     <g
        inkscape:groupmode="layer"
@@ -2897,13 +2918,13 @@
          xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:175px;line-height:125%;font-family:'Cooper Std';-inkscape-font-specification:'Cooper Std, Heavy';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#5f594e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          x="179.44939"
-         y="198.7666"
+         y="178.7666"
          id="text4164"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
            id="tspan4166"
            x="179.44939"
-           y="198.7666">2048</tspan></text>
+           y="178.7666">2048</tspan></text>
     </g>
   </g>
 </svg>
