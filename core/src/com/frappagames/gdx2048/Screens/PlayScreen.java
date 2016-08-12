@@ -41,7 +41,10 @@ public class PlayScreen extends GameScreen {
     private static final int GRID_WIDTH = 4;
     private static final int FRAME_THICKNESS = 20;
     private static final int SPAWN_SPEED_MS = 1000;
+    private static final int GRID_Y = 750;
     private final Label gameOverLbl;
+    private final Label timeLbl;
+    private final Label movementsLbl;
     private Label addScoreLbl;
     private Label currentScoreLbl;
     private Label bestScoreLbl;
@@ -50,7 +53,9 @@ public class PlayScreen extends GameScreen {
     private int currentCell;
     private int bestScore;
     private int bestCell;
+    private int movements;
     private GameType gameType;
+    private long startTime;
     private long lastSpawnTime;
 
     protected Table table;
@@ -62,10 +67,14 @@ public class PlayScreen extends GameScreen {
     private BitmapFont font;
     private Random random;
     private boolean gameIsOver;
-    private LabelStyle labelStyle2;
 
     public PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
+
+        if (gameType == GameType.TIME) {
+            Gdx.graphics.setContinuousRendering(true);
+            startTime = TimeUtils.nanoTime();
+        }
 
         this.gameType = gameType;
         currentScore  = 0;
@@ -115,6 +124,11 @@ public class PlayScreen extends GameScreen {
         addScoreLbl.setVisible(false);
         stage2.addActor(addScoreLbl);
 
+
+        LabelStyle labelStyleMovementsAndTime = new LabelStyle(font, Color.valueOf("#AFA08FFF"));
+        movementsLbl = new Label(movements + " déplacements", labelStyleMovementsAndTime);
+        timeLbl = new Label("", labelStyleMovementsAndTime);
+
         replayBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new PlayScreen(game, gameType));
@@ -138,12 +152,12 @@ public class PlayScreen extends GameScreen {
         table.add(replayBtn).pad(10);
         table.add(menuBtn).pad(10).row();
 
-        table.add(gridImg).pad(100, 0, 50, 0).colspan(3).row();
+        table.add(gridImg).pad(135, 0, 5, 0).colspan(3).row();
 
-        table.add().colspan(2);
-        table.add().row();
+        table.add(movementsLbl).colspan(2).align(Align.left).pad(0, 15, 60, 0);
+        table.add(timeLbl).pad(0, 0, 60, 15).align(Align.right).row();
 
-        table.add(explanationImg).colspan(3).row();
+        table.add(explanationImg).pad(50, 0, 0, 0).colspan(3).row();
 
         stage.addActor(table);
 
@@ -161,9 +175,9 @@ public class PlayScreen extends GameScreen {
 
         // Define Game OVer Screen
         BitmapFont font40 = new BitmapFont(Gdx.files.internal("cooper-40-white.fnt"), false);
-        labelStyle2 = new LabelStyle(font40, Color.WHITE);
-        labelStyle2.background = skin.getDrawable("mask_yellow");
-        gameOverLbl = new Label("", labelStyle2);
+        labelStyleMovementsAndTime = new LabelStyle(font40, Color.WHITE);
+        labelStyleMovementsAndTime.background = skin.getDrawable("mask_yellow");
+        gameOverLbl = new Label("", labelStyleMovementsAndTime);
         gameOverLbl.setSize(640, 640);
         gameOverLbl.setAlignment(Align.center);
         gameOverLbl.setPosition(80, 233);
@@ -180,7 +194,7 @@ public class PlayScreen extends GameScreen {
         int xx = 100;
 
         for (int x = 0; x < GRID_WIDTH; x++) {
-            int yy = 720;
+            int yy = GRID_Y;
 
             for (int y = 0; y < GRID_WIDTH; y++) {
                 Tile cell = new Tile(game, 0);
@@ -192,10 +206,31 @@ public class PlayScreen extends GameScreen {
         }
     }
 
+    private String formatTime(int time) {
+        Integer minutes = ((int) Math.floor(time / 60));
+        Integer seconds = time % 60;
+        String result = "";
+
+        result += String.valueOf(minutes);
+        result += ":";
+
+        if (seconds > 10) {
+            result += String.valueOf(seconds);
+        } else {
+            result += "0" + String.valueOf(seconds);
+        }
+
+        return result;
+    }
+
     @Override
     public void update(float delta) {
         // check if we need to add a new cell
         if (!gameIsOver && gameType == GameType.TIME) {
+
+            int elapseTime = Math.round((TimeUtils.nanoTime() - startTime) / 1000000000);
+            timeLbl.setText(formatTime(elapseTime));
+
             if (TimeUtils.nanoTime() - lastSpawnTime > (SPAWN_SPEED_MS * 1000000)) {
                 if (checkCellAvailable()) {
                     addRandomTile();
@@ -311,6 +346,9 @@ public class PlayScreen extends GameScreen {
         updateScore(addScore, 0);
 
         if (hasMove) {
+            movements++;
+            movementsLbl.setText(movements + " déplacements");
+
             // Ajout d'une nouvelle tuile
             addRandomTile();
 
