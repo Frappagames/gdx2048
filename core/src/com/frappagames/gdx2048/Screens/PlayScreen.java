@@ -42,6 +42,7 @@ public class PlayScreen extends GameScreen {
     private static final int FRAME_THICKNESS = 20;
     private static final int SPAWN_SPEED_MS = 1000;
     private static final int GRID_Y = 750;
+    private static final int MASK_Y = 265;
     private static final int SCORE_Y = 1150;
     private final Label gameOverLbl;
     private final Label timeLbl;
@@ -181,7 +182,7 @@ public class PlayScreen extends GameScreen {
         gameOverLbl = new Label("", labelStyleMovementsAndTime);
         gameOverLbl.setSize(640, 640);
         gameOverLbl.setAlignment(Align.center);
-        gameOverLbl.setPosition(80, 233);
+        gameOverLbl.setPosition(80, MASK_Y);
         gameOverLbl.setVisible(false);
 
         stage2.addActor(gameOverLbl);
