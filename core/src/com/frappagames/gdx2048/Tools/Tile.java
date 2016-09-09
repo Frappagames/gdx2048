@@ -1,29 +1,29 @@
 package com.frappagames.gdx2048.Tools;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.frappagames.gdx2048.Gdx2048;
+import com.frappagames.gdx2048.Screens.PlayScreen;
 
 /**
- * Created by gfp on 11/07/16.
+ * Class for the Tile object.
+ * It represent a tile with its value and position and manage its rendering.
  */
-public class Tile {
-    private static final int CELL_WIDTH = 135;
-    private final SpriteBatch batch;
+public class Tile extends Image {
+    private static final int CELL_SIZE = 155;
+    private static final int GRID_Y = 750;
     private final TextureAtlas atlas;
-    private int value;
+    private int value, nextValue;
+    private Vector2 cellLocation, nextLocation;
 
-    private Vector2 cellLocation;
-
-    public Tile(Gdx2048 game, int value) {
-        this.batch = game.batch;
-        this.atlas = game.atlas;
-        setValue(value);
-    }
-
-    public static int getCellWidth() {
-        return CELL_WIDTH;
+    public Tile(TextureAtlas atlas, Vector2 cellLocation, int value) {
+        this.atlas = atlas;
+        this.setCellLocation(cellLocation);
+        this.setValue(value);
     }
 
     public int getValue() {
@@ -32,32 +32,31 @@ public class Tile {
 
     public void setValue(int value) {
         this.value = value;
+        this.setDrawable(
+                new TextureRegionDrawable(
+                        atlas.findRegion("tile" + String.valueOf(this.getValue()))
+                )
+        );
     }
 
-    public boolean isZeroValue() {
-        return (value == 0);
+    public void setCellLocation(Vector2 position) {
+        this.cellLocation = new Vector2(position.x, position.y);
+        int x = 100 + ((int) position.x * CELL_SIZE);
+        int y = GRID_Y - ((int) position.y * CELL_SIZE);
+        this.setPosition(x, y);
     }
 
-    public void setCellLocation(int x, int y) {
-        setCellLocation(new Vector2(x, y));
-    }
-
-    public void setCellLocation(Vector2 cellLocation) {
-        this.cellLocation = cellLocation;
-    }
-
-    public void draw() {
-        if (!isZeroValue()) {
-            batch.draw(
-                    atlas.findRegion("tile" + String.valueOf(this.getValue())),
-                    cellLocation.x,
-                    cellLocation.y
-            );
-        }
+    public void moveTo(int newX, int newY) {
+        int x = 100 + (newX * CELL_SIZE);
+        int y = GRID_Y - (newY * CELL_SIZE);
     }
 
     @Override
     public String toString() {
         return (String.valueOf(this.getValue()));
+    }
+
+    public Vector2 getPosition() {
+        return cellLocation;
     }
 }
