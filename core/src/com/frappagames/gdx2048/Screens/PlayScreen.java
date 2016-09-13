@@ -165,9 +165,6 @@ public class PlayScreen extends GameScreen {
 
         stage.addActor(table);
 
-
-        stage.addActor(new Tile(game.atlas, new Vector2(0, 0), 2048));
-
         // Define input and gesture processors
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(stage);
@@ -241,96 +238,144 @@ public class PlayScreen extends GameScreen {
         boolean hasMove = false;
         int addScore = 0;
 
-//        switch (direction) {
-//            case UP:
-//                for (int x = 0; x < 4; x++) {
-//                    for (int y1 = 0; y1 < 3; y1++) {
-//                        for (int y2 = y1 + 1; y2 < 4; y2++) {
-//                            if (board[x][y1].getValue() == 0 && board[x][y2].getValue() != 0) {
-//                                board[x][y1].setValue(board[x][y2].getValue());
-//                                board[x][y2].setValue(0);
-//                                hasMove = true;
-//                            } else if (board[x][y1].getValue() != 0 && board[x][y1].getValue() == board[x][y2].getValue()) {
-//                                int newValue = board[x][y1].getValue() * 2;
-//                                board[x][y1].setValue(newValue);
-//                                board[x][y2].setValue(0);
-//                                addScore += newValue;
-//                                hasMove = true;
-//                                break;
-//                            } else if (board[x][y2].getValue() != 0) {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//                break;
-//            case DOWN:
-//                for (int x = 0; x < 4; x++) {
-//                    for (int y1 = 3; y1 >= 1; y1--) {
-//                        for (int y2 = y1 - 1; y2 >= 0; y2--) {
-//                            if (board[x][y1].getValue() == 0 && board[x][y2].getValue() != 0) {
-//                                board[x][y1].setValue(board[x][y2].getValue());
-//                                board[x][y2].setValue(0);
-//                                hasMove = true;
-//                            } else if (board[x][y1].getValue() != 0 && board[x][y1].getValue() == board[x][y2].getValue()) {
-//                                int newValue = board[x][y1].getValue() * 2;
-//                                board[x][y1].setValue(newValue);
-//                                board[x][y2].setValue(0);
-//                                addScore += newValue;
-//                                hasMove = true;
-//                                break;
-//                            } else if (board[x][y2].getValue() != 0) {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//                break;
-//            case LEFT:
-//                for (int y = 0; y < 4; y++) {
-//                    for (int x1 = 0; x1 < 3; x1++) {
-//                        for (int x2 = x1 + 1; x2 < 4; x2++) {
-//                            if (board[x1][y].getValue() == 0 && board[x2][y].getValue() != 0) {
-//                                board[x1][y].setValue(board[x2][y].getValue());
-//                                board[x2][y].setValue(0);
-//                                hasMove = true;
-//                            } else if (board[x1][y].getValue() != 0 && board[x1][y].getValue() == board[x2][y].getValue()) {
-//                                int newValue = board[x1][y].getValue() * 2;
-//                                board[x1][y].setValue(newValue);
-//                                board[x2][y].setValue(0);
-//                                addScore += newValue;
-//                                hasMove = true;
-//                                break;
-//                            } else if (board[x2][y].getValue() != 0) {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//                break;
-//            case RIGHT:
-//                for (int y = 0; y < 4; y++) {
-//                    for (int x1 = 3; x1 >= 1; x1--) {
-//                        for (int x2 = x1 - 1; x2 >= 0; x2--) {
-//                            if (board[x1][y].getValue() == 0 && board[x2][y].getValue() != 0) {
-//                                board[x1][y].setValue(board[x2][y].getValue());
-//                                board[x2][y].setValue(0);
-//                                hasMove = true;
-//                            } else if (board[x1][y].getValue() != 0 && board[x1][y].getValue() == board[x2][y].getValue()) {
-//                                int newValue = board[x1][y].getValue() * 2;
-//                                board[x1][y].setValue(newValue);
-//                                board[x2][y].setValue(0);
-//                                addScore += newValue;
-//                                hasMove = true;
-//                                break;
-//                            } else if (board[x2][y].getValue() != 0) {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//                break;
-//        }
+        switch (direction) {
+            case UP:
+                for (int x = 0; x < 4; x++) {
+                    for (int y1 = 0; y1 < 4; y1++) {
+                        Tile cell = getCellAt(new Vector2(x, y1));
+
+                        if (cell == null) {
+                            for (int y2 = y1 + 1; y2 < 4; y2++) {
+                                Tile cell2 = getCellAt(new Vector2(x, y2));
+
+                                if (cell2 != null) {
+                                    cell2.moveTo(x, y1);
+                                    cell = cell2;
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (cell != null) {
+                            for (int y2 = y1 + 1; y2 < 4; y2++) {
+                                Tile cell2 = getCellAt(new Vector2(x, y2));
+
+                                if (cell2 != null && cell.getValue() == cell2.getValue()) {
+                                    int newValue = 2 * cell.getValue();
+                                    cell.updateAnDelete(newValue, x, y1, board, cell2);
+                                    addScore += newValue;
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case DOWN:
+                for (int x = 3; x >= 0; x--) {
+                    for (int y1 = 3; y1 >= 0; y1--) {
+                        Tile cell = getCellAt(new Vector2(x, y1));
+
+                        if (cell == null) {
+                            for (int y2 = y1 - 1; y2 >= 0; y2--) {
+                                Tile cell2 = getCellAt(new Vector2(x, y2));
+
+                                if (cell2 != null) {
+                                    cell2.moveTo(x, y1);
+                                    cell = cell2;
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (cell != null) {
+                            for (int y2 = y1 - 1; y2 >= 0; y2--) {
+                                Tile cell2 = getCellAt(new Vector2(x, y2));
+
+                                if (cell2 != null && cell.getValue() == cell2.getValue()) {
+                                    int newValue = 2 * cell.getValue();
+                                    cell.updateAnDelete(newValue, x, y1, board, cell2);
+                                    addScore += newValue;
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case LEFT:
+                for (int y = 0; y < 4; y++) {
+                    for (int x1 = 0; x1 < 4; x1++) {
+                        Tile cell = getCellAt(new Vector2(x1, y));
+
+                        if (cell == null) {
+                            for (int x2 = x1 + 1; x2 < 4; x2++) {
+                                Tile cell2 = getCellAt(new Vector2(x2, y));
+
+                                if (cell2 != null) {
+                                    cell2.moveTo(x1, y);
+                                    cell = cell2;
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (cell != null) {
+                            for (int x2 = x1 + 1; x2 < 4; x2++) {
+                                Tile cell2 = getCellAt(new Vector2(x2, y));
+
+                                if (cell2 != null && cell.getValue() == cell2.getValue()) {
+                                    int newValue = 2 * cell.getValue();
+                                    cell.updateAnDelete(newValue, x1, y, board, cell2);
+                                    addScore += newValue;
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case RIGHT:
+                for (int y = 3; y >= 0; y--) {
+                    for (int x1 = 3; x1 >= 0; x1--) {
+                        Tile cell = getCellAt(new Vector2(x1, y));
+
+                        if (cell == null) {
+                            for (int x2 = x1 - 1; x2 >= 0; x2--) {
+                                Tile cell2 = getCellAt(new Vector2(x2, y));
+
+                                if (cell2 != null) {
+                                    cell2.moveTo(x1, y);
+                                    cell = cell2;
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (cell != null) {
+                            for (int x2 = x1 - 1; x2 >= 0; x2--) {
+                                Tile cell2 = getCellAt(new Vector2(x2, y));
+
+                                if (cell2 != null && cell.getValue() == cell2.getValue()) {
+                                    int newValue = 2 * cell.getValue();
+                                    cell.updateAnDelete(newValue, x1, y, board, cell2);
+                                    addScore += newValue;
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+        }
 
         if ((gameType == GameType.TIME) && (addScore != 0)) {
             addScore += 5;
@@ -412,18 +457,12 @@ public class PlayScreen extends GameScreen {
     }
 
     private boolean cellExists(Vector2 position) {
-        for (Tile cell : board) {
-            if (cell.getPosition() == position) {
-                return true;
-            }
-        }
-
-        return false;
+        return this.getCellAt(position) != null;
     }
 
     private Tile getCellAt(Vector2 position) {
         for (Tile cell : board) {
-            if (cell.getPosition() == position) {
+            if (cell.getPosition().equals(position)) {
                 return cell;
             }
         }
