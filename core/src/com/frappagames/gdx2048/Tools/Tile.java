@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Scaling;
 import com.frappagames.gdx2048.Gdx2048;
 import com.frappagames.gdx2048.Screens.PlayScreen;
@@ -19,7 +21,7 @@ import java.util.List;
  * Class for the Tile object.
  * It represent a tile with its value and position and manage its rendering.
  */
-public class Tile extends Image {
+public class Tile extends Image implements Json.Serializable {
     private static final int CELL_SIZE = 155;
     private static final int GRID_Y = 750;
     private TextureAtlas atlas;
@@ -59,6 +61,7 @@ public class Tile extends Image {
         int x = 100 + (newX * CELL_SIZE);
         int y = GRID_Y - (newY * CELL_SIZE);
         this.nextLocation = new Vector2(newX, newY);
+        this.cellLocation = new Vector2(newX, newY);
         this.setPosition(x, y);
     }
 
@@ -76,5 +79,18 @@ public class Tile extends Image {
         this.setCellLocation(new Vector2(x, y));
         board.remove(cell2);
         cell2.remove();
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("value", value);
+        json.writeValue("x", cellLocation.x);
+        json.writeValue("y", cellLocation.y);
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        value = jsonData.child().get("value").asInt();
+        cellLocation = new Vector2(jsonData.child().get("x").asInt(), jsonData.child().get("y").asInt());
     }
 }

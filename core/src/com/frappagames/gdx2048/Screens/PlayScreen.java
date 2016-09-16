@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.frappagames.gdx2048.Gdx2048;
 import com.frappagames.gdx2048.Gdx2048.Direction;
@@ -25,6 +26,7 @@ import com.frappagames.gdx2048.Gdx2048.GameType;
 import com.frappagames.gdx2048.Tools.GameGestureListener;
 import com.frappagames.gdx2048.Tools.GameInputProcessor;
 import com.frappagames.gdx2048.Tools.GameScreen;
+import com.frappagames.gdx2048.Tools.GameState;
 import com.frappagames.gdx2048.Tools.Settings;
 import com.frappagames.gdx2048.Tools.Tile;
 
@@ -41,36 +43,20 @@ import java.util.Random;
  * TODO * Opt. : Hauts faits Google Game
  */
 public class PlayScreen extends GameScreen {
-    private static final int GRID_WIDTH = 4;
-    private static final int SPAWN_SPEED_MS = 1000;
-    private static final int MASK_Y = 265;
-    private static final int SCORE_Y = 1150;
-    private final Label gameOverLbl;
-    private final Label timeLbl;
-    private final Label movementsLbl;
-    private Label addScoreLbl;
-    private Label currentScoreLbl;
-    private Label bestScoreLbl;
-//    private Tile[][] board;
-    private List<Tile> board;
-    private int currentScore;
-    private int currentCell;
-    private int bestScore;
-    private int bestCell;
-    private int movements;
+    private static final int GRID_WIDTH = 4, SPAWN_SPEED_MS = 1000, MASK_Y = 265, SCORE_Y = 1150;
+    private long startTime, lastSpawnTime;
+    private boolean gameIsOver;
+    private final Label gameOverLbl, timeLbl, movementsLbl;
+    private final TextButton replayBtn, menuBtn;
+    private final Image titleImg, explanationImg, gridImg;
+    private Label addScoreLbl, currentScoreLbl, bestScoreLbl;
     private GameType gameType;
-    private long startTime;
-    private long lastSpawnTime;
-
-    protected Table table;
-    private final TextButton replayBtn;
-    private final TextButton menuBtn;
-    private final Image titleImg;
-    private final Image explanationImg;
-    private final Image gridImg;
     private BitmapFont font;
     private Random random;
-    private boolean gameIsOver;
+    protected Table table;
+
+    private List<Tile> board;
+    private int currentScore, currentCell, bestScore, bestCell, movements;
 
     public PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
@@ -80,18 +66,18 @@ public class PlayScreen extends GameScreen {
             startTime = TimeUtils.nanoTime();
         }
 
-        this.gameType = gameType;
-        currentScore  = 0;
-        currentCell   = 0;
-        bestScore     = (gameType == GameType.CLASSIC) ? Settings.getBestScore() : Settings.getBestScoreTimeGame();
-        bestCell      = (gameType == GameType.CLASSIC) ? Settings.getBestCell() : Settings.getBestCellTimeGame();
-        gameIsOver    = false;
+        this.gameType      = gameType;
+        this.currentScore  = 0;
+        this.currentCell   = 0;
+        this.bestScore     = (gameType == GameType.CLASSIC) ? Settings.getBestScore() : Settings.getBestScoreTimeGame();
+        this.bestCell      = (gameType == GameType.CLASSIC) ? Settings.getBestCell() : Settings.getBestCellTimeGame();
+        this.gameIsOver    = false;
 
-        titleImg       = new Image(game.atlas.findRegion("title_small"));
-        explanationImg = new Image(game.atlas.findRegion("explanation_text"));
-        gridImg        = new Image(game.atlas.findRegion("grid"));
-        font           = new BitmapFont(Gdx.files.internal("cooper-32-white.fnt"), false);
-        this.random    = new Random();
+        this.titleImg       = new Image(game.atlas.findRegion("title_small"));
+        this.explanationImg = new Image(game.atlas.findRegion("explanation_text"));
+        this.gridImg        = new Image(game.atlas.findRegion("grid"));
+        this.font           = new BitmapFont(Gdx.files.internal("cooper-32-white.fnt"), false);
+        this.random         = new Random();
 
         Skin skin = new Skin();
         skin.addRegions(game.atlas);
@@ -533,8 +519,25 @@ public class PlayScreen extends GameScreen {
         }
     }
 
+    private void save() {
+        GameState gameState = new GameState();
+        gameState.setScore(this.currentScore);
+        gameState.setBestScore(this.bestScore);
+        gameState.setCell(this.currentCell);
+        gameState.setBestCell(this.bestCell);
+        gameState.setMovements(this.movements);
+        gameState.setTime(0);
+        gameState.setBoard(this.board);
+
+
+//        private List<Tile> board;
+        Json json = new Json();
+        System.out.println(json.prettyPrint(gameState));
+    }
+
     @Override
     public void dispose() {
+        this.save();
         super.dispose();
         font.dispose();
     }
