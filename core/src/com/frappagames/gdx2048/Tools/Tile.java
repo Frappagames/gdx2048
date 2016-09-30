@@ -28,6 +28,11 @@ public class Tile extends Image implements Json.Serializable {
     private int value, nextValue;
     private Vector2 cellLocation, nextLocation;
 
+    public Tile() {
+        super(null, Scaling.stretch, Align.center);
+        this.atlas = Gdx2048.getAtlas();
+    }
+
     public Tile(TextureAtlas atlas, Vector2 cellLocation, int value) {
         super(new TextureRegionDrawable(atlas.findRegion("tile" + String.valueOf(value))), Scaling.stretch, Align.center);
         this.atlas = atlas;
@@ -39,7 +44,7 @@ public class Tile extends Image implements Json.Serializable {
         return value;
     }
 
-    public void setValue(int value) {
+    private void setValue(int value) {
         this.value = value;
         this.setDrawable(
                 new TextureRegionDrawable(
@@ -48,8 +53,8 @@ public class Tile extends Image implements Json.Serializable {
         );
     }
 
-    public void setCellLocation(Vector2 position) {
-        this.cellLocation = new Vector2(position.x, position.y);
+    private void setCellLocation(Vector2 position) {
+        this.cellLocation = position;
         int x = 100 + ((int) position.x * CELL_SIZE);
         int y = GRID_Y - ((int) position.y * CELL_SIZE);
         this.setPosition(x, y);
@@ -67,14 +72,20 @@ public class Tile extends Image implements Json.Serializable {
 
     @Override
     public String toString() {
-        return (String.valueOf(this.getValue()));
+        return (
+            this.getPosition().x
+            + " : "
+            + this.getPosition().y
+            + " = "
+            + String.valueOf(this.getValue())
+        );
     }
 
     public Vector2 getPosition() {
         return nextLocation;
     }
 
-    public void updateAnDelete(int newValue, int x, int y, List<Tile> board, Tile cell2) {
+    public void updateAndDelete(int newValue, int x, int y, List<Tile> board, Tile cell2) {
         this.setValue(newValue);
         this.setCellLocation(new Vector2(x, y));
         board.remove(cell2);
@@ -90,7 +101,7 @@ public class Tile extends Image implements Json.Serializable {
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-        value = jsonData.child().get("value").asInt();
-        cellLocation = new Vector2(jsonData.child().get("x").asInt(), jsonData.child().get("y").asInt());
+        this.setValue(jsonData.get("value").asInt());
+        this.setCellLocation(new Vector2(jsonData.get("x").asInt(), jsonData.get("y").asInt()));
     }
 }
