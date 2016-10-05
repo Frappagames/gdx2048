@@ -31,6 +31,7 @@ import com.frappagames.gdx2048.Tools.Settings;
 import com.frappagames.gdx2048.Tools.Tile;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -120,13 +121,15 @@ public class PlayScreen extends GameScreen {
 
         replayBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game, gameType));
+            // Suppression des tuiles actuelles
+            clearBoard();
+            game.setScreen(new PlayScreen(game, gameType));
             }
         });
 
         menuBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MenuScreen(game));
+            game.setScreen(new MenuScreen(game));
             }
         });
 
@@ -173,6 +176,7 @@ public class PlayScreen extends GameScreen {
 
         addRandomTile();
         addRandomTile();
+
         Gdx.graphics.requestRendering();
     }
 
@@ -406,8 +410,7 @@ public class PlayScreen extends GameScreen {
     private void showGrid(float delta) {
         game.batch.begin();
         for (Tile cell : board) {
-            System.out.println(cell);
-            cell.draw(game.batch, delta);
+            cell.draw(game.batch, 1);
         }
         game.batch.end();
     }
@@ -519,19 +522,32 @@ public class PlayScreen extends GameScreen {
         }
     }
 
+    private void clearSaveFile() {
+        Preferences saveFile = this.getSaveFile();
+        saveFile.clear();
+        saveFile.flush();
+        this.currentScore = 0;
+        this.currentCell = 0;
+        this.bestCell = 0;
+        this.movements = 0;
+        this.elapseTime = 0;
+
+        // Suppression des tuiles actuelles
+        this.clearBoard();
+    }
+    private Preferences getSaveFile() {
+        if (this.gameType == GameType.TIME) {
+            return Gdx.app.getPreferences("com.frappagames.gdx2048.saveTimeGame");
+        } else {
+            return Gdx.app.getPreferences("com.frappagames.gdx2048.saveClassicGame");
+        }
+    }
+
     private void save() {
-        System.out.println("Game saved");
-        Preferences saveFile;
+        Preferences saveFile = this.getSaveFile();
         Json json = new Json();
 
-        if (this.gameType == GameType.TIME) {
-            saveFile = Gdx.app.getPreferences("com.frappagames.gdx2048.saveTimeGame");
-        } else {
-            saveFile = Gdx.app.getPreferences("com.frappagames.gdx2048.saveClassicGame");
-        }
-
         saveFile.putInteger("currentScore", this.currentScore);
-        saveFile.putInteger("bestScore", this.bestScore);
         saveFile.putInteger("currentCell", this.currentCell);
         saveFile.putInteger("bestCell", this.bestCell);
         saveFile.putInteger("movements", this.movements);
@@ -541,31 +557,68 @@ public class PlayScreen extends GameScreen {
     }
 
     private void restore() {
-        System.out.println("Game restored");
-
-        Preferences saveFile;
+        Preferences saveFile = this.getSaveFile();
         Json json = new Json();
-
-        if (this.gameType == GameType.TIME) {
-            saveFile = Gdx.app.getPreferences("com.frappagames.gdx2048.saveTimeGame");
-        } else {
-            saveFile = Gdx.app.getPreferences("com.frappagames.gdx2048.saveClassicGame");
-        }
+        List<Tile> savedBoard;
 
         this.currentScore = saveFile.getInteger("currentScore", 0);
-        this.bestScore = saveFile.getInteger("bestScore", 0);
         this.currentCell = saveFile.getInteger("currentCell", 0);
         this.bestCell = saveFile.getInteger("bestCell", 0);
         this.movements = saveFile.getInteger("movements", 0);
         this.elapseTime = saveFile.getInteger("elapseTime", 0);
 
         String gameBoard = saveFile.getString("board", "");
-        if (!gameBoard.equals("")) {
-            this.board = json.fromJson(List.class, gameBoard);
+        if (!gameBoard.equals("") && !gameBoard.equals("NULL")) {
+            // Suppression des tuiles actuelles
+            this.clearBoard();
+
+            // Ajout des tuiles sauvegardées
+            savedBoard = json.fromJson(List.class, gameBoard);
+
+            for (Tile cell : savedBoard) {
+                Tile newCell = new Tile(Gdx2048.getAtlas(), cell.getPosition(), cell.getValue());
+                board.add(newCell);
+                stage.addActor(newCell);
+            }
+
+            // Mise à jour des scores
+            currentScoreLbl.setText(String.valueOf(currentScore));
+            bestScoreLbl.setText(String.valueOf(bestScore));
+
+            // Mise à jour des déplacements et du temps
+            movementsLbl.setText(movements + " déplacements");
+
+            if (!gameIsOver && gameType == GameType.TIME) {
+                timeLbl.setText(formatTime(this.elapseTime));
+            }
+        }
+    }
+
+    /**
+     *  Suppression des tuiles actuelles
+     */
+    private void clearBoard() {
+        if (!this.board.isEmpty()) {
+            for (Iterator<Tile> iterator = this.board.iterator(); iterator.hasNext(); ) {
+                iterator.next();
+                iterator.remove();
+            }
         }
 
-        // Affichage de la grille
-        Gdx.graphics.requestRendering();
+        this.currentScore = 0;
+        this.currentCell  = 0;
+        this.movements    = 0;
+        this.elapseTime   = 0;
+
+        // Mise à jour des scores
+        currentScoreLbl.setText("0");
+
+        // Mise à jour des déplacements et du temps
+        movementsLbl.setText("0 déplacement");
+
+        if (!gameIsOver && gameType == GameType.TIME) {
+            timeLbl.setText(formatTime(0));
+        }
     }
 
     @Override
