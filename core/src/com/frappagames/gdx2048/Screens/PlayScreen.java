@@ -47,7 +47,7 @@ public class PlayScreen extends GameScreen {
     private static final int GRID_WIDTH = 4, SPAWN_SPEED_MS = 1000, MASK_Y = 265, SCORE_Y = 1150;
     private long startTime, lastSpawnTime;
     private boolean gameIsOver;
-    private final Label gameOverLbl, timeLbl, movementsLbl;
+    private Label gameOverLbl, timeLbl, movementsLbl;
     private Label addScoreLbl, currentScoreLbl, bestScoreLbl;
     private GameType gameType;
     private BitmapFont font;
@@ -72,12 +72,27 @@ public class PlayScreen extends GameScreen {
         this.bestScore     = (gameType == GameType.CLASSIC) ? Settings.getBestScore() : Settings.getBestScoreTimeGame();
         this.bestCell      = (gameType == GameType.CLASSIC) ? Settings.getBestCell() : Settings.getBestCellTimeGame();
         this.gameIsOver    = false;
+        this.font          = new BitmapFont(Gdx.files.internal("cooper-32-white.fnt"), false);
+        this.random        = new Random();
 
+        // Define input and gesture processors
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(new GestureDetector(new GameGestureListener(this)));
+        inputMultiplexer.addProcessor(new GameInputProcessor(this));
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
+        board = new ArrayList<Tile>();
+
+        initializeGrid();
+
+        Gdx.graphics.requestRendering();
+    }
+
+    private void initializeGrid() {
         Image titleImg = new Image(Gdx2048.getAtlas().findRegion("title_small"));
         Image explanationImg = new Image(Gdx2048.getAtlas().findRegion("explanation_text"));
         Image gridImg = new Image(Gdx2048.getAtlas().findRegion("grid"));
-        this.font           = new BitmapFont(Gdx.files.internal("cooper-32-white.fnt"), false);
-        this.random         = new Random();
 
         Skin skin = new Skin();
         skin.addRegions(Gdx2048.getAtlas());
@@ -106,6 +121,13 @@ public class PlayScreen extends GameScreen {
         bestScoreContainer.add(bestScoreLbl).pad(70, 10, 10, 10);
         bestScoreContainer.setBackground(skin.getDrawable("best_score"));
 
+        LabelStyle labelStyleMovementsAndTime = new LabelStyle(font, Color.valueOf("#AFA08FFF"));
+        movementsLbl = new Label("", labelStyleMovementsAndTime);
+        timeLbl = new Label("", labelStyleMovementsAndTime);
+
+        LabelStyle labelStyleGameOver = new LabelStyle(font, Color.WHITE);
+        gameOverLbl = new Label("", labelStyleGameOver);
+
         LabelStyle labelStyleAddScore = new LabelStyle(font, Color.valueOf("#E8BB31FF"));
         addScoreLbl = new Label("", labelStyleAddScore);
         addScoreLbl.setAlignment(Align.center, Align.bottom);
@@ -113,23 +135,18 @@ public class PlayScreen extends GameScreen {
         addScoreLbl.setWidth(200);
         addScoreLbl.setVisible(false);
         stage2.addActor(addScoreLbl);
-
-
-        LabelStyle labelStyleMovementsAndTime = new LabelStyle(font, Color.valueOf("#AFA08FFF"));
-        movementsLbl = new Label(movements + " déplacements", labelStyleMovementsAndTime);
-        timeLbl = new Label("", labelStyleMovementsAndTime);
+        movementsLbl.setText("0 déplacement");
 
         replayBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-            // Suppression des tuiles actuelles
-            clearBoard();
-            game.setScreen(new PlayScreen(game, gameType));
+                resetGame();
+                game.setScreen(new PlayScreen(game, gameType));
             }
         });
 
         menuBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-            game.setScreen(new MenuScreen(game));
+                game.setScreen(new MenuScreen(game));
             }
         });
 
@@ -153,31 +170,23 @@ public class PlayScreen extends GameScreen {
 
         stage.addActor(table);
 
-        // Define input and gesture processors
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(stage);
-        inputMultiplexer.addProcessor(new GestureDetector(new GameGestureListener(this)));
-        inputMultiplexer.addProcessor(new GameInputProcessor(this));
-        Gdx.input.setInputProcessor(inputMultiplexer);
-
-        board = new ArrayList<Tile>();
-
         // Define Game OVer Screen
-        BitmapFont font40 = new BitmapFont(Gdx.files.internal("cooper-40-white.fnt"), false);
-        labelStyleMovementsAndTime = new LabelStyle(font40, Color.WHITE);
-        labelStyleMovementsAndTime.background = skin.getDrawable("mask_yellow");
-        gameOverLbl = new Label("", labelStyleMovementsAndTime);
         gameOverLbl.setSize(640, 640);
         gameOverLbl.setAlignment(Align.center);
         gameOverLbl.setPosition(80, MASK_Y);
         gameOverLbl.setVisible(false);
+        gameOverLbl.getStyle().background = skin.getDrawable("mask_yellow");
 
         stage2.addActor(gameOverLbl);
+    }
 
+    private void resetGame() {
+        // Suppression des tuiles actuelles
+        clearBoard();
+
+        // Ajout de nouvelles tuiles
         addRandomTile();
         addRandomTile();
-
-        Gdx.graphics.requestRendering();
     }
 
     private String formatTime(int time) {
@@ -435,7 +444,7 @@ public class PlayScreen extends GameScreen {
             Vector2 positionDown  = new Vector2(cell1.getPosition().x, cell1.getPosition().y + 1);
 
             for (Tile cell2 : board) {
-                if ((cell2.getPosition() == positionRight || cell2.getPosition() == positionDown)
+                if ((cell2.getPosition().equals(positionRight) || cell2.getPosition().equals(positionDown))
                         && cell1.getValue() == cell2.getValue()) {
                     return true;
                 }
@@ -544,6 +553,10 @@ public class PlayScreen extends GameScreen {
     }
 
     private void save() {
+        if (this.gameIsOver) {
+            resetGame();
+        }
+
         Preferences saveFile = this.getSaveFile();
         Json json = new Json();
 
@@ -591,6 +604,9 @@ public class PlayScreen extends GameScreen {
             if (!gameIsOver && gameType == GameType.TIME) {
                 timeLbl.setText(formatTime(this.elapseTime));
             }
+        } else {
+            addRandomTile();
+            addRandomTile();
         }
     }
 
@@ -603,6 +619,9 @@ public class PlayScreen extends GameScreen {
                 iterator.next();
                 iterator.remove();
             }
+            stage.getActors().clear();
+            stage2.getActors().clear();
+            initializeGrid();
         }
 
         this.currentScore = 0;
