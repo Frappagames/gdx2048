@@ -39,7 +39,7 @@ import java.util.Random;
  * Main play screen
  *
  * TODO * Animation des tuiles
- * TODO : Sauvegarde et restauration de partie
+ * TODO * Ajout de sons
  * TODO * Opt. : Partage de score Google Game
  * TODO * Opt. : Hauts faits Google Game
  */
@@ -56,6 +56,8 @@ public class PlayScreen extends GameScreen {
 
     private List<Tile> board;
     private int currentScore, currentCell, bestScore, bestCell, movements;
+    private int addScore;
+    private boolean hasMove;
 
     PlayScreen(final Gdx2048 game, final GameType gameType) {
         super(game);
@@ -227,149 +229,106 @@ public class PlayScreen extends GameScreen {
 
     @Override
     public void draw(float delta) {
-        showGrid(delta);
+        showGrid();
+    }
+
+    private void joinCells(int x1, int y1, int x2, int y2) {
+        Tile cell = getCellAt(new Vector2(x1, y1));
+        Tile cell2 = getCellAt(new Vector2(x2, y2));
+
+        if (cell != null && cell2 != null && cell.getValue() == cell2.getValue()) {
+            int newValue = 2 * cell.getValue();
+            cell.updateAndDelete(newValue, x1, y1, board, cell2);
+            this.addScore += newValue;
+            this.hasMove = true;
+        }
+    }
+
+    private void moveCells(int x1, int y1, int x2, int y2) {
+        Tile cell = getCellAt(new Vector2(x1, y1));
+
+        if (cell != null && !cellExists(new Vector2(x2, y2))) {
+            cell.moveTo(x2, y2);
+            this.hasMove = true;
+        }
     }
 
     public void move(Direction direction) {
         if (gameIsOver) return;
 
-        boolean hasMove = false;
-        int addScore = 0;
+        addScore = 0;
+        hasMove = false;
 
         switch (direction) {
             case UP:
                 for (int x = 0; x < 4; x++) {
-                    for (int y1 = 0; y1 < 4; y1++) {
-                        Tile cell = getCellAt(new Vector2(x, y1));
+                    // Move cells to empty cells
+                    for (int y = 3; y > 0; y--) {
+                        moveCells(x, y, x, y - 1);
+                    }
 
-                        if (cell == null) {
-                            for (int y2 = y1 + 1; y2 < 4; y2++) {
-                                Tile cell2 = getCellAt(new Vector2(x, y2));
+                    // Join cells
+                    for (int y = 0; y < 3; y++) {
+                        joinCells(x, y, x, y + 1);
+                    }
 
-                                if (cell2 != null) {
-                                    cell2.moveTo(x, y1);
-                                    cell = cell2;
-                                    hasMove = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (cell != null) {
-                            for (int y2 = y1 + 1; y2 < 4; y2++) {
-                                Tile cell2 = getCellAt(new Vector2(x, y2));
-
-                                if (cell2 != null && cell.getValue() == cell2.getValue()) {
-                                    int newValue = 2 * cell.getValue();
-                                    cell.updateAndDelete(newValue, x, y1, board, cell2);
-                                    addScore += newValue;
-                                    hasMove = true;
-                                    break;
-                                }
-                            }
-                        }
+                    // Move cells to empty cells
+                    for (int y = 3; y > 0; y--) {
+                        moveCells(x, y, x, y - 1);
                     }
                 }
                 break;
             case DOWN:
                 for (int x = 3; x >= 0; x--) {
-                    for (int y1 = 3; y1 >= 0; y1--) {
-                        Tile cell = getCellAt(new Vector2(x, y1));
+                    // Move cells to empty cells
+                    for (int y = 0; y < 3; y++) {
+                        moveCells(x, y, x, y + 1);
+                    }
 
-                        if (cell == null) {
-                            for (int y2 = y1 - 1; y2 >= 0; y2--) {
-                                Tile cell2 = getCellAt(new Vector2(x, y2));
+                    // Join cells
+                    for (int y = 3; y > 0; y--) {
+                        joinCells(x, y, x, y - 1);
+                    }
 
-                                if (cell2 != null) {
-                                    cell2.moveTo(x, y1);
-                                    cell = cell2;
-                                    hasMove = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (cell != null) {
-                            for (int y2 = y1 - 1; y2 >= 0; y2--) {
-                                Tile cell2 = getCellAt(new Vector2(x, y2));
-
-                                if (cell2 != null && cell.getValue() == cell2.getValue()) {
-                                    int newValue = 2 * cell.getValue();
-                                    cell.updateAndDelete(newValue, x, y1, board, cell2);
-                                    addScore += newValue;
-                                    hasMove = true;
-                                    break;
-                                }
-                            }
-                        }
+                    // Move cells to empty cells
+                    for (int y = 0; y < 3; y++) {
+                        moveCells(x, y, x, y + 1);
                     }
                 }
                 break;
             case LEFT:
                 for (int y = 0; y < 4; y++) {
-                    for (int x1 = 0; x1 < 4; x1++) {
-                        Tile cell = getCellAt(new Vector2(x1, y));
+                    // Move cells to empty cells
+                    for (int x = 3; x > 0; x--) {
+                        moveCells(x, y, x - 1, y);
+                    }
 
-                        if (cell == null) {
-                            for (int x2 = x1 + 1; x2 < 4; x2++) {
-                                Tile cell2 = getCellAt(new Vector2(x2, y));
+                    // Join cells
+                    for (int x = 0; x < 3; x++) {
+                        joinCells(x, y, x + 1, y);
+                    }
 
-                                if (cell2 != null) {
-                                    cell2.moveTo(x1, y);
-                                    cell = cell2;
-                                    hasMove = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (cell != null) {
-                            for (int x2 = x1 + 1; x2 < 4; x2++) {
-                                Tile cell2 = getCellAt(new Vector2(x2, y));
-
-                                if (cell2 != null && cell.getValue() == cell2.getValue()) {
-                                    int newValue = 2 * cell.getValue();
-                                    cell.updateAndDelete(newValue, x1, y, board, cell2);
-                                    addScore += newValue;
-                                    hasMove = true;
-                                    break;
-                                }
-                            }
-                        }
+                    // Move cells to empty cells
+                    for (int x = 3; x > 0; x--) {
+                        moveCells(x, y, x - 1, y);
                     }
                 }
                 break;
             case RIGHT:
                 for (int y = 3; y >= 0; y--) {
-                    for (int x1 = 3; x1 >= 0; x1--) {
-                        Tile cell = getCellAt(new Vector2(x1, y));
+                    // Move cells to empty cells
+                    for (int x = 0; x < 3; x++) {
+                        moveCells(x, y, x + 1, y);
+                    }
 
-                        if (cell == null) {
-                            for (int x2 = x1 - 1; x2 >= 0; x2--) {
-                                Tile cell2 = getCellAt(new Vector2(x2, y));
+                    // Join cells
+                    for (int x = 3; x > 0; x--) {
+                        joinCells(x, y, x - 1, y);
+                    }
 
-                                if (cell2 != null) {
-                                    cell2.moveTo(x1, y);
-                                    cell = cell2;
-                                    hasMove = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (cell != null) {
-                            for (int x2 = x1 - 1; x2 >= 0; x2--) {
-                                Tile cell2 = getCellAt(new Vector2(x2, y));
-
-                                if (cell2 != null && cell.getValue() == cell2.getValue()) {
-                                    int newValue = 2 * cell.getValue();
-                                    cell.updateAndDelete(newValue, x1, y, board, cell2);
-                                    addScore += newValue;
-                                    hasMove = true;
-                                    break;
-                                }
-                            }
-                        }
+                    // Move cells to empty cells
+                    for (int x = 0; x < 3; x++) {
+                        moveCells(x, y, x + 1, y);
                     }
                 }
                 break;
@@ -416,7 +375,7 @@ public class PlayScreen extends GameScreen {
         gameIsOver = true;
     }
 
-    private void showGrid(float delta) {
+    private void showGrid() {
         game.batch.begin();
         for (Tile cell : board) {
             cell.draw(game.batch, 1);
@@ -531,19 +490,6 @@ public class PlayScreen extends GameScreen {
         }
     }
 
-    private void clearSaveFile() {
-        Preferences saveFile = this.getSaveFile();
-        saveFile.clear();
-        saveFile.flush();
-        this.currentScore = 0;
-        this.currentCell = 0;
-        this.bestCell = 0;
-        this.movements = 0;
-        this.elapseTime = 0;
-
-        // Suppression des tuiles actuelles
-        this.clearBoard();
-    }
     private Preferences getSaveFile() {
         if (this.gameType == GameType.TIME) {
             return Gdx.app.getPreferences("com.frappagames.gdx2048.saveTimeGame");
@@ -574,12 +520,6 @@ public class PlayScreen extends GameScreen {
         Json json = new Json();
         List<Tile> savedBoard;
 
-        this.currentScore = saveFile.getInteger("currentScore", 0);
-        this.currentCell = saveFile.getInteger("currentCell", 0);
-        this.bestCell = saveFile.getInteger("bestCell", 0);
-        this.movements = saveFile.getInteger("movements", 0);
-        this.elapseTime = saveFile.getInteger("elapseTime", 0);
-
         String gameBoard = saveFile.getString("board", "");
         if (!gameBoard.equals("") && !gameBoard.equals("NULL")) {
             // Suppression des tuiles actuelles
@@ -587,6 +527,12 @@ public class PlayScreen extends GameScreen {
 
             // Ajout des tuiles sauvegardées
             savedBoard = json.fromJson(List.class, gameBoard);
+
+            this.currentScore = saveFile.getInteger("currentScore", 0);
+            this.currentCell = saveFile.getInteger("currentCell", 0);
+            this.bestCell = saveFile.getInteger("bestCell", 0);
+            this.movements = saveFile.getInteger("movements", 0);
+            this.elapseTime = saveFile.getInteger("elapseTime", 0);
 
             for (Tile cell : savedBoard) {
                 Tile newCell = new Tile(Gdx2048.getAtlas(), cell.getPosition(), cell.getValue());
