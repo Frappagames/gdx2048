@@ -85,6 +85,15 @@ public class Tile extends Image implements Json.Serializable {
         return nextLocation;
     }
 
+    /**
+     * Update cell1 value and delete cell2
+     *
+     * @param newValue  Valeur de la cellule
+     * @param x         Position X
+     * @param y         Position Y
+     * @param board     Plateau de jeu
+     * @param cell2     Cellule 2 à supprimer
+     */
     public void updateAndDelete(int newValue, int x, int y, List<Tile> board, Tile cell2) {
         this.setValue(newValue);
         this.setCellLocation(new Vector2(x, y));

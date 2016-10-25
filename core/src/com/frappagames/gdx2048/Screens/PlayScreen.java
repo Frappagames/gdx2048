@@ -244,15 +244,6 @@ public class PlayScreen extends GameScreen {
         }
     }
 
-    private void moveCells(int x1, int y1, int x2, int y2) {
-        Tile cell = getCellAt(new Vector2(x1, y1));
-
-        if (cell != null && !cellExists(new Vector2(x2, y2))) {
-            cell.moveTo(x2, y2);
-            this.hasMove = true;
-        }
-    }
-
     public void move(Direction direction) {
         if (gameIsOver) return;
 
@@ -263,8 +254,18 @@ public class PlayScreen extends GameScreen {
             case UP:
                 for (int x = 0; x < 4; x++) {
                     // Move cells to empty cells
-                    for (int y = 3; y > 0; y--) {
-                        moveCells(x, y, x, y - 1);
+                    for (int y = 0; y < 3; y++) {
+                        if (!cellExists(new Vector2(x, y))) {
+                            for (int y2 = y + 1; y2 < 4; y2++) {
+                                Tile cell = getCellAt(new Vector2(x, y2));
+
+                                if (cell != null) {
+                                    cell.moveTo(x, y);
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
 
                     // Join cells
@@ -273,16 +274,36 @@ public class PlayScreen extends GameScreen {
                     }
 
                     // Move cells to empty cells
-                    for (int y = 3; y > 0; y--) {
-                        moveCells(x, y, x, y - 1);
+                    for (int y = 0; y < 3; y++) {
+                        if (!cellExists(new Vector2(x, y))) {
+                            for (int y2 = y + 1; y2 < 4; y2++) {
+                                Tile cell = getCellAt(new Vector2(x, y2));
+
+                                if (cell != null) {
+                                    cell.moveTo(x, y);
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 break;
             case DOWN:
                 for (int x = 3; x >= 0; x--) {
                     // Move cells to empty cells
-                    for (int y = 0; y < 3; y++) {
-                        moveCells(x, y, x, y + 1);
+                    for (int y = 3; y > 0; y--) {
+                        if (!cellExists(new Vector2(x, y))) {
+                            for (int y2 = y - 1; y2 >= 0; y2--) {
+                                Tile cell = getCellAt(new Vector2(x, y2));
+
+                                if (cell != null) {
+                                    cell.moveTo(x, y);
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
 
                     // Join cells
@@ -291,16 +312,36 @@ public class PlayScreen extends GameScreen {
                     }
 
                     // Move cells to empty cells
-                    for (int y = 0; y < 3; y++) {
-                        moveCells(x, y, x, y + 1);
+                    for (int y = 3; y > 0; y--) {
+                        if (!cellExists(new Vector2(x, y))) {
+                            for (int y2 = y - 1; y2 >= 0; y2--) {
+                                Tile cell = getCellAt(new Vector2(x, y2));
+
+                                if (cell != null) {
+                                    cell.moveTo(x, y);
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 break;
             case LEFT:
                 for (int y = 0; y < 4; y++) {
                     // Move cells to empty cells
-                    for (int x = 3; x > 0; x--) {
-                        moveCells(x, y, x - 1, y);
+                    for (int x = 0; x < 3; x++) {
+                        if (!cellExists(new Vector2(x, y))) {
+                            for (int x2 = x + 1; x2 < 4; x2++) {
+                                Tile cell = getCellAt(new Vector2(x2, y));
+
+                                if (cell != null) {
+                                    cell.moveTo(x, y);
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
 
                     // Join cells
@@ -309,16 +350,36 @@ public class PlayScreen extends GameScreen {
                     }
 
                     // Move cells to empty cells
-                    for (int x = 3; x > 0; x--) {
-                        moveCells(x, y, x - 1, y);
+                    for (int x = 0; x < 3; x++) {
+                        if (!cellExists(new Vector2(x, y))) {
+                            for (int x2 = x + 1; x2 < 4; x2++) {
+                                Tile cell = getCellAt(new Vector2(x2, y));
+
+                                if (cell != null) {
+                                    cell.moveTo(x, y);
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 break;
             case RIGHT:
                 for (int y = 3; y >= 0; y--) {
                     // Move cells to empty cells
-                    for (int x = 0; x < 3; x++) {
-                        moveCells(x, y, x + 1, y);
+                    for (int x = 3; x > 0; x--) {
+                        if (!cellExists(new Vector2(x, y))) {
+                            for (int x2 = x - 1; x2 >= 0; x2--) {
+                                Tile cell = getCellAt(new Vector2(x2, y));
+
+                                if (cell != null) {
+                                    cell.moveTo(x, y);
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
 
                     // Join cells
@@ -327,8 +388,18 @@ public class PlayScreen extends GameScreen {
                     }
 
                     // Move cells to empty cells
-                    for (int x = 0; x < 3; x++) {
-                        moveCells(x, y, x + 1, y);
+                    for (int x = 3; x > 0; x--) {
+                        if (!cellExists(new Vector2(x, y))) {
+                            for (int x2 = x - 1; x2 >= 0; x2--) {
+                                Tile cell = getCellAt(new Vector2(x2, y));
+
+                                if (cell != null) {
+                                    cell.moveTo(x, y);
+                                    hasMove = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 break;
