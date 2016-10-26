@@ -28,12 +28,12 @@ public class AboutScreen extends GameScreen {
     public AboutScreen(final Gdx2048 game) {
         super(game);
 
-        titleImg = new Image(game.atlas.findRegion("lblAbout"));
+        titleImg = new Image(game.getAtlas().findRegion("lblAbout"));
         texte = new Texture("txtAbout.png");
         texteImg = new Image(texte);
 
         Skin skin = new Skin();
-        skin.addRegions(game.atlas);
+        skin.addRegions(game.getAtlas());
 
         font = new BitmapFont(Gdx.files.internal("cooper-40-white.fnt"), false);
 

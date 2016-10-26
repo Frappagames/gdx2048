@@ -28,12 +28,12 @@ public class HowToPlayScreen extends GameScreen {
     public HowToPlayScreen(final Gdx2048 game) {
         super(game);
 
-        titleImg = new Image(game.atlas.findRegion("lblHowToPlay"));
+        titleImg = new Image(game.getAtlas().findRegion("lblHowToPlay"));
         texte = new Texture("txtHowToPlay.png");
         texteImg = new Image(texte);
 
         Skin skin = new Skin();
-        skin.addRegions(game.atlas);
+        skin.addRegions(game.getAtlas());
 
         font = new BitmapFont(Gdx.files.internal("cooper-40-white.fnt"), false);
 

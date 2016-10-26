@@ -13,7 +13,7 @@ public class Gdx2048 extends Game {
 	public Color       clearColor;
 	public static int WIDTH = 800;
 	public static int HEIGHT = 1280;
-	public static TextureAtlas atlas;
+	public TextureAtlas atlas;
 
 	public enum Direction {
 		LEFT, RIGHT, UP, DOWN
@@ -23,10 +23,11 @@ public class Gdx2048 extends Game {
 		CLASSIC, TIME
 	}
 
-	public static TextureAtlas getAtlas() {
+	public TextureAtlas getAtlas() {
 		if (atlas == null) {
 			atlas      = new TextureAtlas(Gdx.files.internal("2048.pack"));
 		}
+
 		return atlas;
 	}
 	

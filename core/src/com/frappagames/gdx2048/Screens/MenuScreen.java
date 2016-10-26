@@ -23,32 +23,20 @@ import com.frappagames.gdx2048.Tools.GameScreen;
  * Created by Miridan on 30/06/16.
  */
 public class MenuScreen extends GameScreen {
-    public static final String WEBSITE_LINK = "http://frappagames.github.io";
-    private final Label moreGamesLbl;
-    private final Label linkLbl;
-    protected Table table;
-    private final TextButton classicGameBtn;
-    private final TextButton timeGameBtn;
-    private final TextButton scoreBtn;
-    private final TextButton howToPlayBtn;
-    private final TextButton aboutBtn;
-    private final TextButton exitBtn;
-    private final Image      titleImg;
-    private final Image      authorImg;
+    private static final String WEBSITE_LINK = "http://frappagames.github.io";
     private final BitmapFont font;
-    private final BitmapFont font32;
 
     public MenuScreen(final Gdx2048 game) {
         super(game);
 
-        titleImg = new Image(game.atlas.findRegion("title_big"));
-        authorImg = new Image(game.atlas.findRegion("author"));
+        Image titleImg = new Image(game.getAtlas().findRegion("title_big"));
+        Image authorImg = new Image(game.getAtlas().findRegion("author"));
 
         Skin skin = new Skin();
-        skin.addRegions(game.atlas);
+        skin.addRegions(game.getAtlas());
 
         font = new BitmapFont(Gdx.files.internal("cooper-40-white.fnt"), false);
-        font32 = new BitmapFont(Gdx.files.internal("cooper-32-white.fnt"), false);
+        BitmapFont font32 = new BitmapFont(Gdx.files.internal("cooper-32-white.fnt"), false);
 
         TextButtonStyle redBtnSkin = new TextButtonStyle();
         redBtnSkin.font = font;
@@ -66,17 +54,17 @@ public class MenuScreen extends GameScreen {
         brownBtnSkin.down = skin.getDrawable("btn_gray");
 
 
-        classicGameBtn = new TextButton("Partie classique", yellowBtnSkin);
-        timeGameBtn    = new TextButton("Contre-la-montre", redBtnSkin);
-        scoreBtn       = new TextButton("Meilleurs scores", brownBtnSkin);
-        howToPlayBtn   = new TextButton("Comment jouer", brownBtnSkin);
-        aboutBtn       = new TextButton("A propos de 2048", brownBtnSkin);
-        exitBtn        = new TextButton("Quitter", redBtnSkin);
+        TextButton classicGameBtn = new TextButton("Partie classique", yellowBtnSkin);
+        TextButton timeGameBtn = new TextButton("Contre-la-montre", redBtnSkin);
+        TextButton scoreBtn = new TextButton("Meilleurs scores", brownBtnSkin);
+        TextButton howToPlayBtn = new TextButton("Comment jouer", brownBtnSkin);
+        TextButton aboutBtn = new TextButton("A propos de 2048", brownBtnSkin);
+        TextButton exitBtn = new TextButton("Quitter", redBtnSkin);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(font32, Color.valueOf("#5F594EFF"));
         Label.LabelStyle labelStyleLink = new Label.LabelStyle(font32, Color.valueOf("#AFA08FFF"));
-        moreGamesLbl = new Label("Plus de jeux sur ", labelStyle);
-        linkLbl = new Label(WEBSITE_LINK, labelStyleLink);
+        Label moreGamesLbl = new Label("Plus de jeux sur ", labelStyle);
+        Label linkLbl = new Label(WEBSITE_LINK, labelStyleLink);
         linkLbl.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -84,7 +72,7 @@ public class MenuScreen extends GameScreen {
             }
         });
 
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
         table.add(titleImg).pad(30, 0, 50, 0).row();
         table.add(classicGameBtn).pad(15).row();

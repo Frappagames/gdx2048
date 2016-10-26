@@ -1,21 +1,17 @@
 package com.frappagames.gdx2048.Tools;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Scaling;
 import com.frappagames.gdx2048.Gdx2048;
-import com.frappagames.gdx2048.Screens.PlayScreen;
 
 import java.util.List;
 
@@ -32,7 +28,7 @@ public class Tile extends Image implements Json.Serializable {
 
     public Tile() {
         super(null, Scaling.stretch, Align.center);
-        this.atlas = Gdx2048.getAtlas();
+        this.atlas = ((Gdx2048)Gdx.app.getApplicationListener()).getAtlas();
     }
 
     public Tile(TextureAtlas atlas, Vector2 cellLocation, int value) {

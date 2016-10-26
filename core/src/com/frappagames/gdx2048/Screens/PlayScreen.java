@@ -90,12 +90,12 @@ public class PlayScreen extends GameScreen {
     }
 
     private void initializeGrid() {
-        Image titleImg = new Image(Gdx2048.getAtlas().findRegion("title_small"));
-        Image explanationImg = new Image(Gdx2048.getAtlas().findRegion("explanation_text"));
-        Image gridImg = new Image(Gdx2048.getAtlas().findRegion("grid"));
+        Image titleImg = new Image(this.game.getAtlas().findRegion("title_small"));
+        Image explanationImg = new Image(this.game.getAtlas().findRegion("explanation_text"));
+        Image gridImg = new Image(this.game.getAtlas().findRegion("grid"));
 
         Skin skin = new Skin();
-        skin.addRegions(Gdx2048.getAtlas());
+        skin.addRegions(this.game.getAtlas());
 
         TextButton.TextButtonStyle redBtnSkin = new TextButton.TextButtonStyle();
         redBtnSkin.font = font;
@@ -520,7 +520,7 @@ public class PlayScreen extends GameScreen {
             Vector2 position = new Vector2(x, y);
 
             if (!cellExists(position)) {
-                Tile newCell = new Tile(Gdx2048.getAtlas(), position, value);
+                Tile newCell = new Tile(this.game.getAtlas(), position, value);
                 newCell.addAction(Actions.sequence(
                     Actions.alpha(0),
                     Actions.alpha(1, 0.5f, Interpolation.circleOut)
@@ -620,7 +620,7 @@ public class PlayScreen extends GameScreen {
             this.elapseTime = saveFile.getInteger("elapseTime", 0);
 
             for (Tile cell : savedBoard) {
-                Tile newCell = new Tile(Gdx2048.getAtlas(), cell.getPosition(), cell.getValue());
+                Tile newCell = new Tile(this.game.getAtlas(), cell.getPosition(), cell.getValue());
                 board.add(newCell);
                 stage.addActor(newCell);
             }
