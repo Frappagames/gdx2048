@@ -38,8 +38,6 @@ import java.util.Random;
 /**
  * Main play screen
  *
- * TODO * Animation des tuiles
- * TODO * Ajout de sons
  * TODO * Opt. : Partage de score Google Game
  * TODO * Opt. : Hauts faits Google Game
  */
@@ -238,7 +236,7 @@ public class PlayScreen extends GameScreen {
 
         if (cell != null && cell2 != null && cell.getValue() == cell2.getValue()) {
             int newValue = 2 * cell.getValue();
-            cell.updateAndDelete(newValue, x1, y1, board, cell2);
+            cell2.updateAndDelete(newValue, x1, y1, board, cell);
             this.addScore += newValue;
             this.hasMove = true;
         }
@@ -414,8 +412,20 @@ public class PlayScreen extends GameScreen {
             movements++;
             movementsLbl.setText(movements + " déplacements");
 
+            for (Tile cell : board) {
+                cell.processMove();
+            }
+
             // Ajout d'une nouvelle tuile
-            addRandomTile();
+            stage.addAction(Actions.sequence(
+                Actions.delay(0.3f),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            addRandomTile();
+                        }
+                    })
+            ));
 
             // Affichage de la grille
             Gdx.graphics.requestRendering();
@@ -511,6 +521,10 @@ public class PlayScreen extends GameScreen {
 
             if (!cellExists(position)) {
                 Tile newCell = new Tile(Gdx2048.getAtlas(), position, value);
+                newCell.addAction(Actions.sequence(
+                    Actions.alpha(0),
+                    Actions.alpha(1, 0.5f, Interpolation.circleOut)
+                ));
                 board.add(newCell);
                 stage.addActor(newCell);
                 locationFound = true;

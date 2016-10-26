@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -25,7 +27,7 @@ public class Tile extends Image implements Json.Serializable {
     private static final int CELL_SIZE = 155;
     private static final int GRID_Y = 750;
     private TextureAtlas atlas;
-    private int value, nextValue;
+    private int value;
     private Vector2 cellLocation, nextLocation;
 
     public Tile() {
@@ -59,26 +61,23 @@ public class Tile extends Image implements Json.Serializable {
         int y = GRID_Y - ((int) position.y * CELL_SIZE);
         this.setPosition(x, y);
         this.nextLocation = position;
-//        this.moveTo(x, y);
     }
 
     public void moveTo(int newX, int newY) {
-        int x = 100 + (newX * CELL_SIZE);
-        int y = GRID_Y - (newY * CELL_SIZE);
         this.nextLocation = new Vector2(newX, newY);
-        this.cellLocation = new Vector2(newX, newY);
-        this.setPosition(x, y);
     }
 
-    @Override
-    public String toString() {
-        return (
-            this.getPosition().x
-            + " : "
-            + this.getPosition().y
-            + " = "
-            + String.valueOf(this.getValue())
-        );
+    public void processMove() {
+        if (this.nextLocation.equals(this.cellLocation)) return;
+
+        int x = 100 + ((int) this.nextLocation.x * CELL_SIZE);
+        int y = GRID_Y - ((int) this.nextLocation.y * CELL_SIZE);
+
+        this.addAction(Actions.sequence(
+            Actions.moveTo(x, y, 0.3f, Interpolation.circle)
+        ));
+
+        this.cellLocation = this.nextLocation;
     }
 
     public Vector2 getPosition() {
@@ -96,9 +95,20 @@ public class Tile extends Image implements Json.Serializable {
      */
     public void updateAndDelete(int newValue, int x, int y, List<Tile> board, Tile cell2) {
         this.setValue(newValue);
-        this.setCellLocation(new Vector2(x, y));
+        this.moveTo(x, y);
         board.remove(cell2);
         cell2.remove();
+    }
+
+    @Override
+    public String toString() {
+        return (
+            this.getPosition().x
+            + " : "
+            + this.getPosition().y
+            + " = "
+            + String.valueOf(this.getValue())
+        );
     }
 
     @Override
