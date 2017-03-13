@@ -423,17 +423,17 @@ public class PlayScreen extends GameScreen {
                         @Override
                         public void run() {
                             addRandomTile();
+
+                            // Vérification de l'état du jeu
+                            if (isGameOver()) {
+                                setGameOver();
+                            }
                         }
                     })
             ));
 
             // Affichage de la grille
             Gdx.graphics.requestRendering();
-
-            // Vérification de l'état du jeu
-            if (isGameOver()) {
-                setGameOver();
-            }
         }
     }
 
@@ -465,6 +465,10 @@ public class PlayScreen extends GameScreen {
     }
 
     private boolean isGameOver() {
+        System.out.println("----------------------------------------------------------------");
+        System.out.println("checkCellAvailable = " + checkCellAvailable());
+        System.out.println("checkMoveAvailable = " + checkMoveAvailable());
+        System.out.println("isGameOver = " + !(checkCellAvailable() || checkMoveAvailable()));
         return !(checkCellAvailable() || checkMoveAvailable());
     }
 
@@ -638,6 +642,11 @@ public class PlayScreen extends GameScreen {
         } else {
             addRandomTile();
             addRandomTile();
+        }
+
+        // Vérification de l'état du jeu
+        if (isGameOver()) {
+            setGameOver();
         }
     }
 
