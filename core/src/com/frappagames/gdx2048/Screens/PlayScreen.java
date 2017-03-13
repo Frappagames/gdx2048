@@ -465,10 +465,6 @@ public class PlayScreen extends GameScreen {
     }
 
     private boolean isGameOver() {
-        System.out.println("----------------------------------------------------------------");
-        System.out.println("checkCellAvailable = " + checkCellAvailable());
-        System.out.println("checkMoveAvailable = " + checkMoveAvailable());
-        System.out.println("isGameOver = " + !(checkCellAvailable() || checkMoveAvailable()));
         return !(checkCellAvailable() || checkMoveAvailable());
     }
 
