@@ -85,6 +85,7 @@ public class PlayScreen extends GameScreen {
         board = new ArrayList<Tile>();
 
         initializeGrid();
+        restore();
 
         Gdx.graphics.requestRendering();
     }
@@ -239,6 +240,12 @@ public class PlayScreen extends GameScreen {
             cell2.updateAndDelete(newValue, x1, y1, board, cell);
             this.addScore += newValue;
             this.hasMove = true;
+
+
+            // Update current best cell value
+            if (newValue > currentCell) {
+                currentCell = newValue;
+            }
         }
     }
 
@@ -606,7 +613,7 @@ public class PlayScreen extends GameScreen {
         List<Tile> savedBoard;
 
         String gameBoard = saveFile.getString("board", "");
-        if (!gameBoard.equals("") && !gameBoard.equals("NULL")) {
+        try {
             // Suppression des tuiles actuelles
             this.clearBoard();
 
@@ -635,7 +642,7 @@ public class PlayScreen extends GameScreen {
             if (!gameIsOver && gameType == GameType.TIME) {
                 timeLbl.setText(formatTime(this.elapseTime));
             }
-        } else {
+        } catch (Exception exception) {
             addRandomTile();
             addRandomTile();
         }
