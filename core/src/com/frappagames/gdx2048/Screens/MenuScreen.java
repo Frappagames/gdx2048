@@ -23,7 +23,7 @@ import com.frappagames.gdx2048.Tools.GameScreen;
  * Created by Miridan on 30/06/16.
  */
 public class MenuScreen extends GameScreen {
-    private static final String WEBSITE_LINK = "http://frappagames.github.io";
+    private static final String WEBSITE_LINK = "http://frappagames.itch.io";
     private final BitmapFont font;
 
     public MenuScreen(final Gdx2048 game) {
