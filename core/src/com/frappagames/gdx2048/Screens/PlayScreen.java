@@ -618,7 +618,7 @@ public class PlayScreen extends GameScreen {
             this.clearBoard();
 
             // Ajout des tuiles sauvegardées
-            savedBoard = json.fromJson(new ArrayList<Tile>(){}.getClass(), gameBoard);
+            savedBoard = json.fromJson(List.class, gameBoard);
 
             this.currentScore = saveFile.getInteger("currentScore", 0);
             this.currentCell = saveFile.getInteger("currentCell", 0);
